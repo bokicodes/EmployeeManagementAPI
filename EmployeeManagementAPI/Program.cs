@@ -1,6 +1,7 @@
 using EmployeeManagementAPI.Data;
 using EmployeeManagementAPI.Data.Interfaces;
 using EmployeeManagementAPI.Data.Repositories;
+using EmployeeManagementAPI.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -21,12 +22,17 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddDbContext<EmployeeManagementDBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+
 builder.Services.AddScoped<IZaposleniRepository, ZaposleniRepository>();
+
 
 var app = builder.Build();
 
