@@ -46,11 +46,6 @@ namespace EmployeeManagementAPI.Data
                     .HasForeignKey(d => new { d.RadnoMestoId, d.ZadatakId })
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_DodeljenZadatak_TipZadatka");
-
-                entity.HasData(
-                    new DodeljenZadatak { RadnoMestoId = 1, ZadatakId = 1, ZaposleniId = 1, DatumZadavanja = DateTime.Now, DatumZavrsetka = DateTime.Now.AddDays(7) },
-                    new DodeljenZadatak { RadnoMestoId = 2, ZadatakId = 2, ZaposleniId = 2, DatumZadavanja = DateTime.Now, DatumZavrsetka = DateTime.Now.AddDays(10) }
-                    );
             });
 
             modelBuilder.Entity<OrganizacionaCelina>(entity =>
@@ -68,11 +63,6 @@ namespace EmployeeManagementAPI.Data
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("OpisOC");
-
-                entity.HasData(
-                    new OrganizacionaCelina { OrgCelinaId = 1, NazivOC = "Prodaja", OpisOC = "Odeljenje za prodaju" },
-                    new OrganizacionaCelina { OrgCelinaId = 2, NazivOC = "HR", OpisOC = "Human resources odeljenje" }
-                );
             });
 
             modelBuilder.Entity<RadnoMesto>(entity =>
@@ -88,11 +78,6 @@ namespace EmployeeManagementAPI.Data
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("OpisRM");
-
-                entity.HasData(
-                    new RadnoMesto { RadnoMestoId = 1, NazivRM = "Menadzer", OpisRM = "Zasluzan za upravljanje timom" },
-                    new RadnoMesto { RadnoMestoId = 2, NazivRM = "Developer", OpisRM = "Zasluzan za izgradnju softvera" }
-                );
             });
 
             modelBuilder.Entity<TipZadatka>(entity =>
@@ -116,11 +101,6 @@ namespace EmployeeManagementAPI.Data
                     .HasForeignKey(d => d.RadnoMestoId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_TipZadatka_RadnoMesto");
-
-                entity.HasData(
-                    new TipZadatka { RadnoMestoId = 1, ZadatakId = 1, NazivZad = "Generisanje izvestaja", OpisZad = "Napraviti izvestaj profita za ovaj mesec" },
-                    new TipZadatka { RadnoMestoId = 2, ZadatakId = 2, NazivZad = "Pregled koda", OpisZad = "Pregledati PR" }
-                );
             });
 
             modelBuilder.Entity<Zaposleni>(entity =>
@@ -148,11 +128,6 @@ namespace EmployeeManagementAPI.Data
                     .HasForeignKey(d => d.RadnoMestoId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Zaposleni_RadnoMesto");
-
-                entity.HasData(
-                    new Zaposleni { ZaposleniId = 1, Ime = "Milos", Prezime = "Jovanovic", DatumZaposlenja = DateTime.Now.AddYears(-2), OrgCelinaId = 1, RadnoMestoId = 1 },
-                    new Zaposleni { ZaposleniId = 2, Ime = "Milica", Prezime = "Stefanovic", DatumZaposlenja = DateTime.Now.AddYears(-1), OrgCelinaId = 2, RadnoMestoId = 2 }
-                );
             });
 
             OnModelCreatingPartial(modelBuilder);
