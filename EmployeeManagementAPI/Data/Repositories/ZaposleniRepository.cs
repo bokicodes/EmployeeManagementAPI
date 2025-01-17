@@ -1,5 +1,6 @@
 ﻿using EmployeeManagementAPI.Data.Interfaces;
 using EmployeeManagementAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementAPI.Data.Repositories;
 
@@ -9,8 +10,11 @@ public class ZaposleniRepository : GenericRepository<Zaposleni>, IZaposleniRepos
     {
     }
 
-    public void DeleteZaposleni(Zaposleni zaposleni)
+    public async Task<Zaposleni?> GetZaposleniWithAdditionalInfoAsync(int zaposleniId)
     {
-        throw new NotImplementedException();
+        return await _context.Zaposleni
+            .Where(z => z.ZaposleniId == zaposleniId)
+            .Include(z => z.RadnoMesto).Include(z => z.OrgCelina)
+            .FirstOrDefaultAsync();
     }
 }

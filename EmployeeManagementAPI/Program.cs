@@ -2,6 +2,8 @@ using EmployeeManagementAPI.Data;
 using EmployeeManagementAPI.Data.Interfaces;
 using EmployeeManagementAPI.Data.Repositories;
 using EmployeeManagementAPI.Helpers;
+using EmployeeManagementAPI.Services;
+using EmployeeManagementAPI.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -30,9 +32,9 @@ builder.Services.AddDbContext<EmployeeManagementDBContext>(options =>
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-
 builder.Services.AddScoped<IZaposleniRepository, ZaposleniRepository>();
 
+builder.Services.AddScoped<IZaposleniService, ZaposleniService>();
 
 var app = builder.Build();
 

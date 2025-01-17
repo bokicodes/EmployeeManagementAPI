@@ -9,5 +9,12 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<Zaposleni, ZaposleniDTO>();
+
+        CreateMap<Zaposleni, ZaposleniMoreInfoDTO>()
+            .ForMember(dest => dest.RadnoMesto, opt => opt.MapFrom(src => src.RadnoMesto.NazivRM))
+            .ForMember(dest => dest.OrganizacionaCelina, opt => opt
+            .MapFrom(src => src.OrgCelina != null ? src.OrgCelina.NazivOC : ""));
+
+        CreateMap<AddZaposleniDTO, ZaposleniDTO>();
     }
 }
