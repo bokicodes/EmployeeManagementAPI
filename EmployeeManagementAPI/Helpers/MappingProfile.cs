@@ -8,13 +8,14 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<Zaposleni, ZaposleniDTO>();
+        CreateMap<Zaposleni, ZaposleniDTO>().ReverseMap();
 
         CreateMap<Zaposleni, ZaposleniMoreInfoDTO>()
             .ForMember(dest => dest.RadnoMesto, opt => opt.MapFrom(src => src.RadnoMesto.NazivRM))
             .ForMember(dest => dest.OrganizacionaCelina, opt => opt
-            .MapFrom(src => src.OrgCelina != null ? src.OrgCelina.NazivOC : ""));
+            .MapFrom(src => src.OrgCelina != null ? src.OrgCelina.NazivOC : ""))
+            .ReverseMap();
 
-        CreateMap<AddZaposleniDTO, ZaposleniDTO>();
+        CreateMap<Zaposleni, AddZaposleniDTO>().ReverseMap();
     }
 }

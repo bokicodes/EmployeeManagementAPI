@@ -4,6 +4,7 @@ using EmployeeManagementAPI.DTOs.Zaposleni;
 using EmployeeManagementAPI.Models;
 using EmployeeManagementAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementAPI.Controllers;
 
@@ -30,7 +31,7 @@ public class ZaposleniController : ControllerBase
         return Ok(listaZaposlenihDto);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}", Name = "GetZaposleniById")]
     public async Task<ActionResult<ZaposleniDTO>> GetZaposleniById([FromRoute] int id)
     {
         _logger.LogInformation("Poziva se metoda za vracanje zaposlenog...");
@@ -58,5 +59,26 @@ public class ZaposleniController : ControllerBase
         }
 
         return Ok(zaposleniDto);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddZaposleni([FromBody] AddZaposleniDTO addZaposleniDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            var zaposleniDto = await _zaposleniService.AddZaposleniAsync(addZaposleniDto);
+            return CreatedAtRoute("GetZaposleniById", new { id = zaposleniDto.ZaposleniId }, zaposleniDto);
+        }
+        catch (DbUpdateException)
+        {
+            return NotFound(new { errorMsg = "Ne postojece radno mesto ili organizaciona celina" });
+        }
+
+        
     }
 }

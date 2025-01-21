@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using EmployeeManagementAPI.Data.Interfaces;
 using EmployeeManagementAPI.DTOs.Zaposleni;
+using EmployeeManagementAPI.Models;
 using EmployeeManagementAPI.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementAPI.Services;
 
@@ -14,6 +16,24 @@ public class ZaposleniService : IZaposleniService
     {
         _zaposleniRepo = zaposleniRepo;
         _mapper = mapper;
+    }
+
+    public async Task<ZaposleniDTO> AddZaposleniAsync(AddZaposleniDTO addZaposleniDto)
+    {
+        var zaposleni = _mapper.Map<Zaposleni>(addZaposleniDto);
+
+        var noviZaposleni = await _zaposleniRepo.AddAsync(zaposleni);
+
+        try
+        {
+            await _zaposleniRepo.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            throw;
+        }
+
+        return _mapper.Map<ZaposleniDTO>(noviZaposleni);
     }
 
     public async Task<IEnumerable<ZaposleniDTO>> GetAllZaposleniAsync()
