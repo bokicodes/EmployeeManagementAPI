@@ -8,4 +8,6 @@ public interface IZaposleniService
     Task<ZaposleniDTO> GetZaposleniByIdAsync(int id);
     Task<ZaposleniMoreInfoDTO?> GetZaposleniWithAdditionalInfo(int id);
     Task<ZaposleniDTO> AddZaposleniAsync(AddZaposleniDTO addZaposleniDto);
+    Task UpdateZaposleniAsync(UpdateZaposleniDTO updateZaposleniDto);
+    Task DeleteZaposleniAsync(int id);
 }

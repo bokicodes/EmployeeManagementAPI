@@ -17,5 +17,7 @@ public class MappingProfile : Profile
             .ReverseMap();
 
         CreateMap<Zaposleni, AddZaposleniDTO>().ReverseMap();
+
+        CreateMap<Zaposleni, UpdateZaposleniDTO>().ReverseMap();
     }
 }

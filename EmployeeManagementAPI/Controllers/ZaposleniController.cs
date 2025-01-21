@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using EmployeeManagementAPI.Data.Interfaces;
+﻿using EmployeeManagementAPI.CustomExceptions;
 using EmployeeManagementAPI.DTOs.Zaposleni;
-using EmployeeManagementAPI.Models;
 using EmployeeManagementAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -72,13 +70,52 @@ public class ZaposleniController : ControllerBase
         try
         {
             var zaposleniDto = await _zaposleniService.AddZaposleniAsync(addZaposleniDto);
+
             return CreatedAtRoute("GetZaposleniById", new { id = zaposleniDto.ZaposleniId }, zaposleniDto);
         }
         catch (DbUpdateException)
         {
             return NotFound(new { errorMsg = "Ne postojece radno mesto ili organizaciona celina" });
+        } 
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateZaposleni(int id, [FromBody] UpdateZaposleniDTO updateZaposleniDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
         }
 
-        
+        try
+        {
+            updateZaposleniDto.ZaposleniId = id;
+            await _zaposleniService.UpdateZaposleniAsync(updateZaposleniDto);
+
+            return NoContent();
+        }
+        catch(EntityNotFoundException ex)
+        {
+            return NotFound(new { errorMsg = ex.Message });
+        }
+        catch (DbUpdateException)
+        {
+            return NotFound(new { errorMsg = "Ne postojece radno mesto ili organizaciona celina" });
+        }
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteZaposleni(int id)
+    {
+        try
+        {
+            await _zaposleniService.DeleteZaposleniAsync(id);
+
+            return NoContent();
+        }
+        catch (EntityNotFoundException ex)
+        {
+            return NotFound(new { errorMsg = ex.Message });
+        }
     }
 }

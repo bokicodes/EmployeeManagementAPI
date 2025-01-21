@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EmployeeManagementAPI.CustomExceptions;
 using EmployeeManagementAPI.Data.Interfaces;
 using EmployeeManagementAPI.DTOs.Zaposleni;
 using EmployeeManagementAPI.Models;
@@ -36,6 +37,19 @@ public class ZaposleniService : IZaposleniService
         return _mapper.Map<ZaposleniDTO>(noviZaposleni);
     }
 
+    public async Task DeleteZaposleniAsync(int id)
+    {
+        var zaposleni = await _zaposleniRepo.GetByIdAsync(id);
+
+        if(zaposleni is null)
+        {
+            throw new EntityNotFoundException("Taj zaposleni ne posotji");
+        }
+
+        await _zaposleniRepo.DeleteAsync(id);
+        await _zaposleniRepo.SaveChangesAsync();
+    }
+
     public async Task<IEnumerable<ZaposleniDTO>> GetAllZaposleniAsync()
     {
         var listaZaposlenih = await _zaposleniRepo.GetAllAsync();
@@ -55,5 +69,27 @@ public class ZaposleniService : IZaposleniService
         var zaposleni = await _zaposleniRepo.GetZaposleniWithAdditionalInfoAsync(id);
 
         return _mapper.Map<ZaposleniMoreInfoDTO>(zaposleni);
+    }
+
+    public async Task UpdateZaposleniAsync(UpdateZaposleniDTO updateZaposleniDto)
+    {
+        var zaposleni = await _zaposleniRepo.GetByIdAsync(updateZaposleniDto.ZaposleniId);
+
+        if(zaposleni is null)
+        {
+            throw new EntityNotFoundException("Taj zaposleni ne postoji");
+        }
+
+        _mapper.Map(updateZaposleniDto, zaposleni); 
+        _zaposleniRepo.Update(zaposleni);
+
+        try
+        {
+            await _zaposleniRepo.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            throw;
+        }
     }
 }
