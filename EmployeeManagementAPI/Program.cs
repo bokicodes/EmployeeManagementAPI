@@ -33,8 +33,10 @@ builder.Services.AddDbContext<EmployeeManagementDBContext>(options =>
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddScoped<IZaposleniRepository, ZaposleniRepository>();
+builder.Services.AddScoped<IRadnoMestoRepository, RadnoMestoRepository>();
 
 builder.Services.AddScoped<IZaposleniService, ZaposleniService>();
+builder.Services.AddScoped<IRadnoMestoService, RadnoMestoService>();
 
 var app = builder.Build();
 

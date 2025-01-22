@@ -43,7 +43,7 @@ public class ZaposleniService : IZaposleniService
 
         if(zaposleni is null)
         {
-            throw new EntityNotFoundException("Taj zaposleni ne posotji");
+            throw new EntityNotFoundException("Taj zaposleni ne postoji");
         }
 
         await _zaposleniRepo.DeleteAsync(id);

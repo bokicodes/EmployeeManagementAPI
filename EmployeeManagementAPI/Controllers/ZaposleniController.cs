@@ -38,9 +38,11 @@ public class ZaposleniController : ControllerBase
 
         if(zaposleniDto is null)
         {
+            _logger.LogInformation("Zaposleni nije pronadjen.");
             return NotFound();
         }
 
+        _logger.LogInformation("Zaposleni je pronadjen.");
         return Ok(zaposleniDto);
     }
 
@@ -53,9 +55,11 @@ public class ZaposleniController : ControllerBase
 
         if (zaposleniDto is null)
         {
+            _logger.LogInformation("Zaposleni nije pronadjen.");
             return NotFound();
         }
 
+        _logger.LogInformation("Zaposleni je pronadjen.");
         return Ok(zaposleniDto);
     }
 
@@ -71,10 +75,13 @@ public class ZaposleniController : ControllerBase
         {
             var zaposleniDto = await _zaposleniService.AddZaposleniAsync(addZaposleniDto);
 
+            _logger.LogInformation("Zaposleni je dodat.");
+
             return CreatedAtRoute("GetZaposleniById", new { id = zaposleniDto.ZaposleniId }, zaposleniDto);
         }
         catch (DbUpdateException)
         {
+            _logger.LogInformation("Doslo je do greske");
             return NotFound(new { errorMsg = "Ne postojece radno mesto ili organizaciona celina" });
         } 
     }
@@ -92,14 +99,18 @@ public class ZaposleniController : ControllerBase
             updateZaposleniDto.ZaposleniId = id;
             await _zaposleniService.UpdateZaposleniAsync(updateZaposleniDto);
 
+            _logger.LogInformation("Zaposleni je azuriran.");
+
             return NoContent();
         }
         catch(EntityNotFoundException ex)
         {
+            _logger.LogInformation("Zaposleni nije pronadjen.");
             return NotFound(new { errorMsg = ex.Message });
         }
         catch (DbUpdateException)
         {
+            _logger.LogInformation("Doslo je do greske.");
             return NotFound(new { errorMsg = "Ne postojece radno mesto ili organizaciona celina" });
         }
     }
@@ -111,10 +122,13 @@ public class ZaposleniController : ControllerBase
         {
             await _zaposleniService.DeleteZaposleniAsync(id);
 
+            _logger.LogInformation("Zaposleni je obrisan.");
+
             return NoContent();
         }
         catch (EntityNotFoundException ex)
         {
+            _logger.LogInformation("Zaposleni nije pronadjen.");
             return NotFound(new { errorMsg = ex.Message });
         }
     }
