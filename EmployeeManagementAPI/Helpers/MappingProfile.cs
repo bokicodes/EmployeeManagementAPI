@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EmployeeManagementAPI.DTOs.OrganizacionaCelina;
 using EmployeeManagementAPI.DTOs.RadnoMesto;
 using EmployeeManagementAPI.DTOs.Zaposleni;
 using EmployeeManagementAPI.Models;
@@ -22,6 +23,11 @@ public class MappingProfile : Profile
         CreateMap<RadnoMesto, RadnoMestoMoreInfoDTO>().ReverseMap();
         CreateMap<RadnoMesto, AddRadnoMestoDTO>().ReverseMap();
         CreateMap<RadnoMesto, UpdateRadnoMestoDTO>().ReverseMap();
+
+        CreateMap<OrganizacionaCelina, OrgCelinaDTO>().ReverseMap();
+        CreateMap<OrganizacionaCelina, OrgCelinaMoreInfoDTO>().ReverseMap();
+        CreateMap<OrganizacionaCelina, AddOrgCelinaDTO>().ReverseMap();
+        CreateMap<OrganizacionaCelina, UpdateOrgCelinaDTO>().ReverseMap();
 
     }
 }

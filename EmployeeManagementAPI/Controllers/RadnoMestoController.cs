@@ -66,7 +66,7 @@ public class RadnoMestoController : ControllerBase
         catch (DbUpdateException)
         {
             _logger.LogInformation("Doslo je do greske");
-            return NotFound(new { errorMsg = "Ne postojece radno mesto ili organizaciona celina" });
+            return StatusCode(500, "Doslo je do greske prilikom dodavanja radnog mesta");
         }
     }
 
@@ -95,7 +95,7 @@ public class RadnoMestoController : ControllerBase
         catch (DbUpdateException)
         {
             _logger.LogInformation("Doslo je do greske.");
-            return NotFound(new { errorMsg = "Ne postojece radno mesto ili organizaciona celina" });
+            return StatusCode(500, "Doslo je do greske prilikom dodavanja radnog mesta");
         }
     }
 
