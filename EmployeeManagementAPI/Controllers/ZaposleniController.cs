@@ -20,7 +20,7 @@ public class ZaposleniController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ZaposleniDTO>>> GetAllZaposleni()
+    public async Task<IActionResult> GetAllZaposleni()
     {
         _logger.LogInformation("Poziva se metoda za vracanje svih zaposlenih...");
 
@@ -30,7 +30,7 @@ public class ZaposleniController : ControllerBase
     }
 
     [HttpGet("{id}", Name = "GetZaposleniById")]
-    public async Task<ActionResult<ZaposleniDTO>> GetZaposleniById([FromRoute] int id)
+    public async Task<IActionResult> GetZaposleniById([FromRoute] int id)
     {
         _logger.LogInformation("Poziva se metoda za vracanje zaposlenog...");
 
@@ -47,7 +47,7 @@ public class ZaposleniController : ControllerBase
     }
 
     [HttpGet("{id}/with-details")]
-    public async Task<ActionResult<ZaposleniMoreInfoDTO>> GetZaposleniWithInfoById([FromRoute] int id)
+    public async Task<IActionResult> GetZaposleniWithInfoById([FromRoute] int id)
     {
         _logger.LogInformation("Poziva se metoda za vracanje zaposlenog sa dodatnim informacijama...");
 

@@ -2,7 +2,7 @@
 using EmployeeManagementAPI.CustomExceptions;
 using EmployeeManagementAPI.Data.Interfaces;
 using EmployeeManagementAPI.DTOs.RadnoMesto;
-using EmployeeManagementAPI.DTOs.Zaposleni;
+using EmployeeManagementAPI.DTOs.TipZadatka;
 using EmployeeManagementAPI.Models;
 using EmployeeManagementAPI.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -85,5 +85,65 @@ public class RadnoMestoService : IRadnoMestoService
         {
             throw;
         }
+    }
+
+    public async Task AddTipZadatkaForRadnoMestoAsync(int id, AddTipZadatkaDTO tipZadatkaDTO)
+    {
+        var radnoMesto = await _radnoMestoRepo.GetByIdAsync(id);
+
+        if(radnoMesto == null)
+        {
+            throw new EntityNotFoundException("To radno mesto ne postoji");
+        }
+
+        var tipZad = _mapper.Map<TipZadatka>(tipZadatkaDTO);
+
+        radnoMesto.AddTipZadatka(tipZad);
+
+        await _radnoMestoRepo.SaveChangesAsync();
+    }
+
+    public async Task UpdateTipZadatkaForRadnoMestoAsync(int id, int tipZadatkaId, UpdateTipZadatkaDTO updateTipZadatkaDTO)
+    {
+        var radnoMesto = await _radnoMestoRepo.GetRadnoMestoWithAdditionalInfoAsync(id);
+
+        if (radnoMesto is null)
+        {
+            throw new EntityNotFoundException("To radno mesto ne postoji");
+        }
+
+        var tipZad = radnoMesto.TipoviZadataka.FirstOrDefault(z => z.ZadatakId == tipZadatkaId);
+
+        if(tipZad is null)
+        {
+            throw new EntityNotFoundException("Taj tip zadatka ne postoji");
+        }
+
+        var noviZad = _mapper.Map<TipZadatka>(updateTipZadatkaDTO);
+
+        radnoMesto.UpdateTipZadatka(tipZad, noviZad);
+
+        await _radnoMestoRepo.SaveChangesAsync();
+    }
+
+    public async Task DeleteTipZadatkaForRadnoMestoAsync(int id, int tipZadatkaId)
+    {
+        var radnoMesto = await _radnoMestoRepo.GetRadnoMestoWithAdditionalInfoAsync(id);
+
+        if (radnoMesto is null)
+        {
+            throw new EntityNotFoundException("To radno mesto ne postoji");
+        }
+
+        var tipZad = radnoMesto.TipoviZadataka.FirstOrDefault(z => z.ZadatakId == tipZadatkaId);
+
+        if (tipZad is null)
+        {
+            throw new EntityNotFoundException("Taj tip zadatka ne postoji");
+        }
+
+        radnoMesto.DeleteTipZadatka(tipZad);
+
+        await _radnoMestoRepo.SaveChangesAsync();
     }
 }

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace EmployeeManagementAPI.Controllers;
 
 [ApiController]
-[Route("/api/orgceline")]
+[Route("/api/organizacione-celine")]
 public class OrgCelinaController : ControllerBase
 {
     private readonly IOrgCelinaService _orgCelinaService;
@@ -20,7 +20,7 @@ public class OrgCelinaController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<OrgCelinaDTO>>> GetAllOrgCelina()
+    public async Task<IActionResult> GetAllOrgCelina()
     {
         _logger.LogInformation("Poziva se metoda za vracanje svih organizacionih celina...");
 
@@ -30,7 +30,7 @@ public class OrgCelinaController : ControllerBase
     }
 
     [HttpGet("{id}", Name = "GetOrgCelinaById")]
-    public async Task<ActionResult<OrgCelinaMoreInfoDTO>> GetOrgCelinaById([FromRoute] int id)
+    public async Task<IActionResult> GetOrgCelinaById([FromRoute] int id)
     {
         _logger.LogInformation("Poziva se metoda za vracanje organizacione celine sa dodatnim informacijama...");
 

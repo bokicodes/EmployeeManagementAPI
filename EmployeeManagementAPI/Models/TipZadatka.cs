@@ -17,5 +17,11 @@ namespace EmployeeManagementAPI.Models
 
         public virtual RadnoMesto RadnoMesto { get; set; } = null!;
         public virtual ICollection<DodeljenZadatak> DodeljeniZadaci { get; set; }
+
+        public void Update(TipZadatka tipZadatka)
+        {
+            NazivZad = tipZadatka.NazivZad;
+            OpisZad = tipZadatka.OpisZad;
+        }
     }
 }

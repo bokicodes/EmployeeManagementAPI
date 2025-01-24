@@ -1,5 +1,6 @@
 ﻿using EmployeeManagementAPI.CustomExceptions;
 using EmployeeManagementAPI.DTOs.RadnoMesto;
+using EmployeeManagementAPI.DTOs.TipZadatka;
 using EmployeeManagementAPI.DTOs.Zaposleni;
 using EmployeeManagementAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementAPI.Controller;
 
-[Route("api/radnamesta")]
+[Route("api/radna-mesta")]
 [ApiController]
 public class RadnoMestoController : ControllerBase
 {
@@ -21,7 +22,7 @@ public class RadnoMestoController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<RadnoMestoDTO>>> GetAllRadnoMesto()
+    public async Task<IActionResult> GetAllRadnoMesto()
     {
         _logger.LogInformation("Poziva se metoda za vracanje svih radnih mesta...");
 
@@ -31,7 +32,7 @@ public class RadnoMestoController : ControllerBase
     }
 
     [HttpGet("{id}", Name = "GetRadnoMestoById")]
-    public async Task<ActionResult<RadnoMestoMoreInfoDTO>> GetRadnoMestoById([FromRoute] int id)
+    public async Task<IActionResult> GetRadnoMestoById([FromRoute] int id)
     {
         _logger.LogInformation("Poziva se metoda za vracanje radnog mesta sa dodatnim informacijama...");
 
@@ -95,7 +96,7 @@ public class RadnoMestoController : ControllerBase
         catch (DbUpdateException)
         {
             _logger.LogInformation("Doslo je do greske.");
-            return StatusCode(500, "Doslo je do greske prilikom dodavanja radnog mesta");
+            return StatusCode(500, "Doslo je do greske prilikom dodavanja radnog mesta.");
         }
     }
 
@@ -114,6 +115,87 @@ public class RadnoMestoController : ControllerBase
         {
             _logger.LogInformation("Radno mesto nije pronadjeno.");
             return NotFound(new { errorMsg = ex.Message });
+        }
+    }
+
+
+    // Tipovi zadataka
+
+    [HttpPost("{id}/tipovi-zadataka")]
+    public async Task<IActionResult> AddTipZadatka(int id, [FromBody] AddTipZadatkaDTO addTipZadatkaDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            await _radnoMestoService.AddTipZadatkaForRadnoMestoAsync(id, addTipZadatkaDto);
+
+            return Ok(new { message = "Tip zadatka je uspesno dodat" });
+        }
+        catch(EntityNotFoundException ex)
+        {
+            _logger.LogInformation("Radno mesto nije pronadjeno.");
+            return NotFound(new { errorMsg = ex.Message });
+        }
+        catch (DbUpdateException)
+        {
+            _logger.LogInformation("Doslo je do greske.");
+            return StatusCode(500, "Doslo je do greske prilikom dodavanja zadatka.");
+        }
+    }
+
+    [HttpPut("{id}/tipovi-zadataka/{zadId}")]
+    public async Task<IActionResult> UpdateTipZadatka(int id, int zadId, [FromBody] UpdateTipZadatkaDTO updateTipZadatkaDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            await _radnoMestoService.UpdateTipZadatkaForRadnoMestoAsync(id, zadId, updateTipZadatkaDto);
+
+            return NoContent();
+        }
+        catch (EntityNotFoundException ex)
+        {
+            _logger.LogInformation("Entitet nije pronadjen.");
+            return NotFound(new { errorMsg = ex.Message });
+        }
+        catch (DbUpdateException)
+        {
+            _logger.LogInformation("Doslo je do greske.");
+            return StatusCode(500, "Doslo je do greske prilikom azuriranja zadatka.");
+        }
+    }
+
+    [HttpDelete("{id}/tipovi-zadataka/{zadId}")]
+    public async Task<IActionResult> DeleteTipZadatka(int id, int zadId)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            await _radnoMestoService.DeleteTipZadatkaForRadnoMestoAsync(id, zadId);
+
+            return NoContent();
+        }
+        catch (EntityNotFoundException ex)
+        {
+            _logger.LogInformation("Entitet nije pronadjen.");
+            return NotFound(new { errorMsg = ex.Message });
+        }
+        catch (DbUpdateException)
+        {
+            _logger.LogInformation("Doslo je do greske.");
+            return StatusCode(500, "Doslo je do greske prilikom brisanja zadatka.");
         }
     }
 }

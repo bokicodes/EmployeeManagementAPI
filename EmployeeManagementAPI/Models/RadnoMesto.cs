@@ -17,5 +17,21 @@ namespace EmployeeManagementAPI.Models
 
         public virtual ICollection<TipZadatka> TipoviZadataka { get; set; }
         public virtual ICollection<Zaposleni> Zaposleni { get; set; }
+
+
+        public void AddTipZadatka(TipZadatka tipZadatka)
+        {
+            TipoviZadataka.Add(tipZadatka);
+        }
+
+        public void UpdateTipZadatka(TipZadatka stariZadatak, TipZadatka noviZadatak)
+        {
+            stariZadatak.Update(noviZadatak);
+        }
+
+        public void DeleteTipZadatka(TipZadatka tipZadatka)
+        {
+            TipoviZadataka.Remove(tipZadatka);
+        }
     }
 }
