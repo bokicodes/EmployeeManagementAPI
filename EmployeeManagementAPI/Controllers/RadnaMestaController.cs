@@ -10,12 +10,12 @@ namespace EmployeeManagementAPI.Controller;
 
 [Route("api/radna-mesta")]
 [ApiController]
-public class RadnoMestoController : ControllerBase
+public class RadnaMestaController : ControllerBase
 {
     private readonly IRadnoMestoService _radnoMestoService;
-    private readonly ILogger<RadnoMestoController> _logger;
+    private readonly ILogger<RadnaMestaController> _logger;
 
-    public RadnoMestoController(IRadnoMestoService radnoMestoService, ILogger<RadnoMestoController> logger)
+    public RadnaMestaController(IRadnoMestoService radnoMestoService, ILogger<RadnaMestaController> logger)
     {
         _radnoMestoService = radnoMestoService;
         _logger = logger;

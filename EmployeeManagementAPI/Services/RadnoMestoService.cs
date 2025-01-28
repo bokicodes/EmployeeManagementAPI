@@ -146,4 +146,11 @@ public class RadnoMestoService : IRadnoMestoService
 
         await _radnoMestoRepo.SaveChangesAsync();
     }
+
+    public async Task<RadnoMestoDTO> GetRadnoMestoByTipZadatkaIdAsync(int zadatakId)
+    {
+        var radnoMesto = await _radnoMestoRepo.GetRadnoMestoByTipZadatkaIdAsync(zadatakId);
+
+        return _mapper.Map<RadnoMestoDTO>(radnoMesto);
+    }
 }

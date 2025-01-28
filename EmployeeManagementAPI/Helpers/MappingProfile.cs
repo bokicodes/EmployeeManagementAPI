@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EmployeeManagementAPI.DTOs.DodeljenZadatak;
 using EmployeeManagementAPI.DTOs.OrganizacionaCelina;
 using EmployeeManagementAPI.DTOs.RadnoMesto;
 using EmployeeManagementAPI.DTOs.TipZadatka;
@@ -33,6 +34,13 @@ public class MappingProfile : Profile
         CreateMap<TipZadatka, TipZadatkaDTO>().ReverseMap();
         CreateMap<TipZadatka, AddTipZadatkaDTO>().ReverseMap();
         CreateMap<TipZadatka, UpdateTipZadatkaDTO>().ReverseMap();
+
+        CreateMap<DodeljenZadatak, DodeljenZadatakDTO>()
+            .ForMember(dz => dz.NazivZaposlenog, opt => opt.MapFrom(src => $"{src.Zaposleni.Ime} {src.Zaposleni.Prezime}"))
+            .ForMember(dz => dz.NazivZadatka, opt => opt.MapFrom(src => src.TipZadatka.NazivZad))
+            .ReverseMap();
+        CreateMap<DodeljenZadatak, AddDodeljenZadatakDTO>().ReverseMap();
+        CreateMap<DodeljenZadatak, UpdateDodeljenZadatakDTO>().ReverseMap();
 
     }
 }

@@ -10,6 +10,13 @@ public class RadnoMestoRepository : GenericRepository<RadnoMesto>, IRadnoMestoRe
     {
     }
 
+    public async Task<RadnoMesto?> GetRadnoMestoByTipZadatkaIdAsync(int zadatakId)
+    {
+        return await _context.RadnaMesta
+            .Where(rm => rm.TipoviZadataka.Any(tz => tz.ZadatakId == zadatakId))
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<RadnoMesto?> GetRadnoMestoWithAdditionalInfoAsync(int radnoMestoId)
     {
         return await _context.RadnaMesta.Where(rm => rm.RadnoMestoId == radnoMestoId)

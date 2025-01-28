@@ -8,12 +8,12 @@ namespace EmployeeManagementAPI.Controllers;
 
 [ApiController]
 [Route("/api/organizacione-celine")]
-public class OrgCelinaController : ControllerBase
+public class OrgCelineController : ControllerBase
 {
     private readonly IOrgCelinaService _orgCelinaService;
-    private readonly ILogger<OrgCelinaController> _logger;
+    private readonly ILogger<OrgCelineController> _logger;
 
-    public OrgCelinaController(IOrgCelinaService orgCelinaService, ILogger<OrgCelinaController> logger)
+    public OrgCelineController(IOrgCelinaService orgCelinaService, ILogger<OrgCelineController> logger)
     {
         _orgCelinaService = orgCelinaService;
         _logger = logger;
