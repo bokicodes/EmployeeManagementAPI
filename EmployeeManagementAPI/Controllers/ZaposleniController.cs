@@ -20,21 +20,21 @@ public class ZaposleniController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllZaposleni()
+    public async Task<IActionResult> VratiSveZaposlene()
     {
         _logger.LogInformation("Poziva se metoda za vracanje svih zaposlenih...");
 
-        var listaZaposlenihDto = await _zaposleniService.GetAllZaposleniAsync();
+        var listaZaposlenihDto = await _zaposleniService.VratiSveZaposleneAsync();
 
         return Ok(listaZaposlenihDto);
     }
 
-    [HttpGet("{id}", Name = "GetZaposleniById")]
-    public async Task<IActionResult> GetZaposleniById([FromRoute] int id)
+    [HttpGet("{id}", Name = "VratiZaposlenogPoId")]
+    public async Task<IActionResult> VratiZaposlenogPoId([FromRoute] int id)
     {
         _logger.LogInformation("Poziva se metoda za vracanje zaposlenog...");
 
-        var zaposleniDto = await _zaposleniService.GetZaposleniByIdAsync(id);
+        var zaposleniDto = await _zaposleniService.VratiZaposlenogPoIdAsync(id);
 
         if(zaposleniDto is null)
         {
@@ -46,12 +46,12 @@ public class ZaposleniController : ControllerBase
         return Ok(zaposleniDto);
     }
 
-    [HttpGet("{id}/with-details")]
-    public async Task<IActionResult> GetZaposleniWithInfoById([FromRoute] int id)
+    [HttpGet("{id}/detaljno")]
+    public async Task<IActionResult> VratiZaposlenogSaDetaljima([FromRoute] int id)
     {
         _logger.LogInformation("Poziva se metoda za vracanje zaposlenog sa dodatnim informacijama...");
 
-        var zaposleniDto = await _zaposleniService.GetZaposleniWithAdditionalInfo(id);
+        var zaposleniDto = await _zaposleniService.VratiZaposlenogSaDetaljimaAsync(id);
 
         if (zaposleniDto is null)
         {
@@ -64,7 +64,7 @@ public class ZaposleniController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddZaposleni([FromBody] AddZaposleniDTO addZaposleniDto)
+    public async Task<IActionResult> DodajZaposlenog([FromBody] DodajZaposlenogDTO dodajZaposlenogDto)
     {
         if (!ModelState.IsValid)
         {
@@ -73,11 +73,11 @@ public class ZaposleniController : ControllerBase
 
         try
         {
-            var zaposleniDto = await _zaposleniService.AddZaposleniAsync(addZaposleniDto);
+            var zaposleniDto = await _zaposleniService.DodajZaposlenogAsync(dodajZaposlenogDto);
 
             _logger.LogInformation("Zaposleni je dodat.");
 
-            return CreatedAtRoute("GetZaposleniById", new { id = zaposleniDto.ZaposleniId }, zaposleniDto);
+            return CreatedAtRoute("VratiZaposlenogPoId", new { id = zaposleniDto.ZaposleniId }, zaposleniDto);
         }
         catch (DbUpdateException)
         {
@@ -87,7 +87,7 @@ public class ZaposleniController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateZaposleni(int id, [FromBody] UpdateZaposleniDTO updateZaposleniDto)
+    public async Task<IActionResult> AzurirajZaposlenog(int id, [FromBody] AzurirajZaposlenogDTO azurirajZaposlenogDto)
     {
         if (!ModelState.IsValid)
         {
@@ -96,8 +96,8 @@ public class ZaposleniController : ControllerBase
 
         try
         {
-            updateZaposleniDto.ZaposleniId = id;
-            await _zaposleniService.UpdateZaposleniAsync(updateZaposleniDto);
+            azurirajZaposlenogDto.ZaposleniId = id;
+            await _zaposleniService.AzurirajZaposlenogAsync(azurirajZaposlenogDto);
 
             _logger.LogInformation("Zaposleni je azuriran.");
 
@@ -116,11 +116,11 @@ public class ZaposleniController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteZaposleni(int id)
+    public async Task<IActionResult> ObrisiZaposlenog(int id)
     {
         try
         {
-            await _zaposleniService.DeleteZaposleniAsync(id);
+            await _zaposleniService.ObrisiZaposlenogAsync(id);
 
             _logger.LogInformation("Zaposleni je obrisan.");
 

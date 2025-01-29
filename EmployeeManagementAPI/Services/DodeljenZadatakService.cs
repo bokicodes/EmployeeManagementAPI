@@ -5,7 +5,6 @@ using EmployeeManagementAPI.DTOs.DodeljenZadatak;
 using EmployeeManagementAPI.Models;
 using EmployeeManagementAPI.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 
 namespace EmployeeManagementAPI.Services;
 
@@ -26,29 +25,29 @@ public class DodeljenZadatakService : IDodeljenZadatakService
         _mapper = mapper;
     }
 
-    public async Task<DodeljenZadatakDTO> AddDodeljenZadatakAsync(int zaposleniId,
-        int zadatakId, AddDodeljenZadatakDTO addDodeljenZadatakDto)
+    public async Task<DodeljenZadatakDTO> DodeliZadatakAsync(int zaposleniId,
+        int zadatakId, DodeliZadatakDTO dodeliZadatakDto)
     {
         await ProveraPostojanjaEntitetaAsync(zaposleniId, zadatakId);
 
-        if((await _dodeljenZadatakRepo.GetAllAsync(zaposleniId))
+        if((await _dodeljenZadatakRepo.VratiSveAsync(zaposleniId))
             .Any(dz => dz.ZadatakId == zadatakId))
         {
             throw new InvalidOperationException("Taj zadatak je vec dodeljen tom zaposlenom");
         }
 
-        var dodeljenZadatak = _mapper.Map<DodeljenZadatak>(addDodeljenZadatakDto);
+        var dodeljenZadatak = _mapper.Map<DodeljenZadatak>(dodeliZadatakDto);
         
         dodeljenZadatak.ZaposleniId = zaposleniId;
         dodeljenZadatak.ZadatakId = zadatakId;
         dodeljenZadatak.RadnoMestoId = (await _radnoMestoRepo
-            .GetRadnoMestoByTipZadatkaIdAsync(zadatakId))!.RadnoMestoId;
+            .VratiRadnoMestoPoTipuZadatkaIdAsync(zadatakId))!.RadnoMestoId;
 
-        var noviDodeljenZadatak = await _dodeljenZadatakRepo.AddAsync(dodeljenZadatak);
+        var noviDodeljenZadatak = await _dodeljenZadatakRepo.DodajAsync(dodeljenZadatak);
 
         try
         {
-            await _dodeljenZadatakRepo.SaveChangesAsync();
+            await _dodeljenZadatakRepo.SacuvajPromeneAsync();
         }
         catch (DbUpdateException)
         {
@@ -58,38 +57,38 @@ public class DodeljenZadatakService : IDodeljenZadatakService
         return _mapper.Map<DodeljenZadatakDTO>(noviDodeljenZadatak);
     }
 
-    public async Task DeleteDodeljenZadatakAsync(int zaposleniId, int zadatakId)
+    public async Task ObrisiDodeljenZadatakAsync(int zaposleniId, int zadatakId)
     {
         await ProveraPostojanjaEntitetaAsync(zaposleniId, zadatakId);
 
-        var dodeljenZadatak = await _dodeljenZadatakRepo.GetByIdsAsync(zaposleniId, zadatakId);
+        var dodeljenZadatak = await _dodeljenZadatakRepo.VratiPoIdsAsync(zaposleniId, zadatakId);
 
         if (dodeljenZadatak is null)
         {
             throw new EntityNotFoundException("Taj zadatak nije dodeljen tom zaposlenom");
         }
 
-        await _dodeljenZadatakRepo.DeleteAsync(zaposleniId, zadatakId);
-        await _dodeljenZadatakRepo.SaveChangesAsync();
+        await _dodeljenZadatakRepo.ObrisiAsync(zaposleniId, zadatakId);
+        await _dodeljenZadatakRepo.SacuvajPromeneAsync();
     }
 
-    public async Task<IEnumerable<DodeljenZadatakDTO>> GetAllDodeljeniZadaciAsync(int zaposleniId)
+    public async Task<IEnumerable<DodeljenZadatakDTO>> VratiSveDodeljeneZadatkeAsync(int zaposleniId)
     {
-        if(await _zaposleniRepo.GetByIdAsync(zaposleniId) is null)
+        if(await _zaposleniRepo.VratiPoIdAsync(zaposleniId) is null)
         {
             throw new EntityNotFoundException("Taj zaposleni ne postoji");
         }
 
-        var listaDodeljenihZadataka = await _dodeljenZadatakRepo.GetAllAsync(zaposleniId);
+        var listaDodeljenihZadataka = await _dodeljenZadatakRepo.VratiSveAsync(zaposleniId);
 
         return _mapper.Map<IEnumerable<DodeljenZadatakDTO>>(listaDodeljenihZadataka);
     }
 
-    public async Task<DodeljenZadatakDTO> GetDodeljenZadatakByIdsAsync(int zaposleniId, int zadatakId)
+    public async Task<DodeljenZadatakDTO> VratiDodeljenZadatakPoIdsAsync(int zaposleniId, int zadatakId)
     {
         await ProveraPostojanjaEntitetaAsync(zaposleniId, zadatakId);
 
-        var dodeljenZadatak = await _dodeljenZadatakRepo.GetByIdsAsync(zaposleniId, zadatakId);
+        var dodeljenZadatak = await _dodeljenZadatakRepo.VratiPoIdsAsync(zaposleniId, zadatakId);
 
         if (dodeljenZadatak is null)
         {
@@ -99,24 +98,24 @@ public class DodeljenZadatakService : IDodeljenZadatakService
         return _mapper.Map<DodeljenZadatakDTO>(dodeljenZadatak);
     }
 
-    public async Task UpdateDodeljenZadatakAsync(int zaposleniId, int zadatakId,
-        UpdateDodeljenZadatakDTO updateDodeljenZadatakDto)
+    public async Task AzurirajDodeljenZadatakAsync(int zaposleniId, int zadatakId,
+        AzurirajDodeljenZadatakDTO azurirajDodeljenZadatakDto)
     {
         await ProveraPostojanjaEntitetaAsync(zaposleniId, zadatakId);
 
-        var dodeljenZadatak = await _dodeljenZadatakRepo.GetByIdsAsync(zaposleniId, zadatakId);
+        var dodeljenZadatak = await _dodeljenZadatakRepo.VratiPoIdsAsync(zaposleniId, zadatakId);
 
         if (dodeljenZadatak is null)
         {
             throw new EntityNotFoundException("Taj zadatak nije dodeljen tom zaposlenom");
         }
 
-        _mapper.Map(updateDodeljenZadatakDto, dodeljenZadatak);
-        _dodeljenZadatakRepo.Update(dodeljenZadatak);
+        _mapper.Map(azurirajDodeljenZadatakDto, dodeljenZadatak);
+        _dodeljenZadatakRepo.Azuriraj(dodeljenZadatak);
 
         try
         {
-            await _dodeljenZadatakRepo.SaveChangesAsync();
+            await _dodeljenZadatakRepo.SacuvajPromeneAsync();
         }
         catch (DbUpdateException)
         {
@@ -126,12 +125,12 @@ public class DodeljenZadatakService : IDodeljenZadatakService
 
     public async Task ProveraPostojanjaEntitetaAsync(int zaposleniId, int zadatakId)
     {
-        if (await _zaposleniRepo.GetByIdAsync(zaposleniId) is null)
+        if (await _zaposleniRepo.VratiPoIdAsync(zaposleniId) is null)
         {
             throw new EntityNotFoundException("Taj zaposleni ne postoji");
         }
 
-        if (await _radnoMestoRepo.GetRadnoMestoByTipZadatkaIdAsync(zadatakId) is null)
+        if (await _radnoMestoRepo.VratiRadnoMestoPoTipuZadatkaIdAsync(zadatakId) is null)
         {
             throw new EntityNotFoundException("Taj tip zadatka ne postoji");
         }

@@ -2,7 +2,7 @@
 
 namespace EmployeeManagementAPI.DTOs.DodeljenZadatak;
 
-public class AddDodeljenZadatakDTO
+public class AzurirajDodeljenZadatakDTO
 {
     [Required]
     public DateTime DatumZadavanja { get; set; }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace EmployeeManagementAPI.Models
+﻿namespace EmployeeManagementAPI.Models
 {
     public partial class TipZadatka
     {
@@ -18,7 +15,7 @@ namespace EmployeeManagementAPI.Models
         public virtual RadnoMesto RadnoMesto { get; set; } = null!;
         public virtual ICollection<DodeljenZadatak> DodeljeniZadaci { get; set; }
 
-        public void Update(TipZadatka tipZadatka)
+        public void Azuriraj(TipZadatka tipZadatka)
         {
             NazivZad = tipZadatka.NazivZad;
             OpisZad = tipZadatka.OpisZad;

@@ -2,8 +2,8 @@
 
 namespace EmployeeManagementAPI.Data.Interfaces;
 
-public interface IRadnoMestoRepository : IGenericRepository<RadnoMesto>
+public interface IRadnoMestoRepository : IGenerickiRepository<RadnoMesto>
 {
-    Task<RadnoMesto?> GetRadnoMestoWithAdditionalInfoAsync(int radnoMestoId);
-    Task<RadnoMesto?> GetRadnoMestoByTipZadatkaIdAsync(int zadatakId);
+    Task<RadnoMesto?> VratiRadnoMestoSaDetaljimaAsync(int radnoMestoId);
+    Task<RadnoMesto?> VratiRadnoMestoPoTipuZadatkaIdAsync(int zadatakId);
 }

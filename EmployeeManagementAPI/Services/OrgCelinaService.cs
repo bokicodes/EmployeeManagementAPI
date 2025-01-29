@@ -19,15 +19,15 @@ public class OrgCelinaService : IOrgCelinaService
         _mapper = mapper;
     }
 
-    public async Task<OrgCelinaDTO> AddOrgCelinaAsync(AddOrgCelinaDTO addOrgCelinaDto)
+    public async Task<OrgCelinaDTO> DodajOrgCelinuAsync(DodajOrgCelinuDTO dodajOrgCelinuDto)
     {
-        var orgCelina = _mapper.Map<OrganizacionaCelina>(addOrgCelinaDto);
+        var orgCelina = _mapper.Map<OrganizacionaCelina>(dodajOrgCelinuDto);
 
-        var novaOrgCelina = await _orgCelinaRepo.AddAsync(orgCelina);
+        var novaOrgCelina = await _orgCelinaRepo.DodajAsync(orgCelina);
 
         try
         {
-            await _orgCelinaRepo.SaveChangesAsync();
+            await _orgCelinaRepo.SacuvajPromeneAsync();
         }
         catch (DbUpdateException)
         {
@@ -37,48 +37,48 @@ public class OrgCelinaService : IOrgCelinaService
         return _mapper.Map<OrgCelinaDTO>(novaOrgCelina);
     }
 
-    public async Task DeleteOrgCelinaAsync(int id)
+    public async Task ObrisiOrgCelinuAsync(int id)
     {
-        var orgCelina = await _orgCelinaRepo.GetByIdAsync(id);
+        var orgCelina = await _orgCelinaRepo.VratiPoIdAsync(id);
 
         if (orgCelina is null)
         {
             throw new EntityNotFoundException("Ta organizaciona celina ne postoji");
         }
 
-        await _orgCelinaRepo.DeleteAsync(id);
-        await _orgCelinaRepo.SaveChangesAsync();
+        await _orgCelinaRepo.ObrisiAsync(id);
+        await _orgCelinaRepo.SacuvajPromeneAsync();
     }
 
-    public async Task<IEnumerable<OrgCelinaDTO>> GetAllOrgCelinaAsync()
+    public async Task<IEnumerable<OrgCelinaDTO>> VratiSveOrgCelineAsync()
     {
-        var listaOrgCelina = await _orgCelinaRepo.GetAllAsync();
+        var listaOrgCelina = await _orgCelinaRepo.VratiSveAsync();
 
         return _mapper.Map<IEnumerable<OrgCelinaDTO>>(listaOrgCelina);
     }
 
-    public async Task<OrgCelinaMoreInfoDTO?> GetOrgCelinaByIdAsync(int id)
+    public async Task<OrgCelinaDetaljnoDTO?> VratiOrgCelinuPoIdAsync(int id)
     {
-        var orgCelina = await _orgCelinaRepo.GetOrgCelinaWithAdditionalInfoAsync(id);
+        var orgCelina = await _orgCelinaRepo.VratiOrgCelinuSaDetaljimaAsync(id);
 
-        return _mapper.Map<OrgCelinaMoreInfoDTO>(orgCelina);
+        return _mapper.Map<OrgCelinaDetaljnoDTO>(orgCelina);
     }
 
-    public async Task UpdateOrgCelinaAsync(UpdateOrgCelinaDTO updateOrgCelinaDto)
+    public async Task AzurirajOrgCelinuAsync(AzurirajOrgCelinuDTO azurirajOrgCelinuDto)
     {
-        var orgCelina = await _orgCelinaRepo.GetByIdAsync(updateOrgCelinaDto.OrgCelinaId);
+        var orgCelina = await _orgCelinaRepo.VratiPoIdAsync(azurirajOrgCelinuDto.OrgCelinaId);
 
         if (orgCelina is null)
         {
             throw new EntityNotFoundException("Ta organizaciona celina ne postoji");
         }
 
-        _mapper.Map(updateOrgCelinaDto, orgCelina);
-        _orgCelinaRepo.Update(orgCelina);
+        _mapper.Map(azurirajOrgCelinuDto, orgCelina);
+        _orgCelinaRepo.Azuriraj(orgCelina);
 
         try
         {
-            await _orgCelinaRepo.SaveChangesAsync();
+            await _orgCelinaRepo.SacuvajPromeneAsync();
         }
         catch (DbUpdateException)
         {

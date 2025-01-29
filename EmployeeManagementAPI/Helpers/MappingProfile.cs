@@ -13,34 +13,34 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<Zaposleni, ZaposleniDTO>().ReverseMap();
-        CreateMap<Zaposleni, ZaposleniMoreInfoDTO>()
+        CreateMap<Zaposleni, ZaposleniDetaljnoDTO>()
             .ForMember(dest => dest.RadnoMesto, opt => opt.MapFrom(src => src.RadnoMesto.NazivRM))
             .ForMember(dest => dest.OrganizacionaCelina, opt => opt
             .MapFrom(src => src.OrgCelina != null ? src.OrgCelina.NazivOC : ""))
             .ReverseMap();
-        CreateMap<Zaposleni, AddZaposleniDTO>().ReverseMap();
-        CreateMap<Zaposleni, UpdateZaposleniDTO>().ReverseMap();
+        CreateMap<Zaposleni, DodajZaposlenogDTO>().ReverseMap();
+        CreateMap<Zaposleni, AzurirajZaposlenogDTO>().ReverseMap();
 
         CreateMap<RadnoMesto, RadnoMestoDTO>().ReverseMap();
-        CreateMap<RadnoMesto, RadnoMestoMoreInfoDTO>().ReverseMap();
-        CreateMap<RadnoMesto, AddRadnoMestoDTO>().ReverseMap();
-        CreateMap<RadnoMesto, UpdateRadnoMestoDTO>().ReverseMap();
+        CreateMap<RadnoMesto, RadnoMestoDetaljnoDTO>().ReverseMap();
+        CreateMap<RadnoMesto, DodajRadnoMestoDTO>().ReverseMap();
+        CreateMap<RadnoMesto, AzurirajRadnoMestoDTO>().ReverseMap();
 
         CreateMap<OrganizacionaCelina, OrgCelinaDTO>().ReverseMap();
-        CreateMap<OrganizacionaCelina, OrgCelinaMoreInfoDTO>().ReverseMap();
-        CreateMap<OrganizacionaCelina, AddOrgCelinaDTO>().ReverseMap();
-        CreateMap<OrganizacionaCelina, UpdateOrgCelinaDTO>().ReverseMap();
+        CreateMap<OrganizacionaCelina, OrgCelinaDetaljnoDTO>().ReverseMap();
+        CreateMap<OrganizacionaCelina, DodajOrgCelinuDTO>().ReverseMap();
+        CreateMap<OrganizacionaCelina, AzurirajOrgCelinuDTO>().ReverseMap();
 
         CreateMap<TipZadatka, TipZadatkaDTO>().ReverseMap();
-        CreateMap<TipZadatka, AddTipZadatkaDTO>().ReverseMap();
-        CreateMap<TipZadatka, UpdateTipZadatkaDTO>().ReverseMap();
+        CreateMap<TipZadatka, DodajTipZadatkaDTO>().ReverseMap();
+        CreateMap<TipZadatka, AzurirajTipZadatkaDTO>().ReverseMap();
 
         CreateMap<DodeljenZadatak, DodeljenZadatakDTO>()
             .ForMember(dz => dz.NazivZaposlenog, opt => opt.MapFrom(src => $"{src.Zaposleni.Ime} {src.Zaposleni.Prezime}"))
             .ForMember(dz => dz.NazivZadatka, opt => opt.MapFrom(src => src.TipZadatka.NazivZad))
             .ReverseMap();
-        CreateMap<DodeljenZadatak, AddDodeljenZadatakDTO>().ReverseMap();
-        CreateMap<DodeljenZadatak, UpdateDodeljenZadatakDTO>().ReverseMap();
+        CreateMap<DodeljenZadatak, DodeliZadatakDTO>().ReverseMap();
+        CreateMap<DodeljenZadatak, AzurirajDodeljenZadatakDTO>().ReverseMap();
 
     }
 }

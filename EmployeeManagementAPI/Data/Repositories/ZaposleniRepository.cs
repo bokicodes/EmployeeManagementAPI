@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementAPI.Data.Repositories;
 
-public class ZaposleniRepository : GenericRepository<Zaposleni>, IZaposleniRepository
+public class ZaposleniRepository : GenerickiRepository<Zaposleni>, IZaposleniRepository
 {
     public ZaposleniRepository(EmployeeManagementDBContext context) : base(context)
     {
     }
 
-    public async Task<Zaposleni?> GetZaposleniWithAdditionalInfoAsync(int zaposleniId)
+    public async Task<Zaposleni?> VratiZaposlenogSaDetaljimaAsync(int zaposleniId)
     {
         return await _context.Zaposleni
             .Where(z => z.ZaposleniId == zaposleniId)

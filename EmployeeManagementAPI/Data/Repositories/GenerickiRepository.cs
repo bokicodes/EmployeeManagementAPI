@@ -3,44 +3,44 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementAPI.Data.Repositories;
 
-public class GenericRepository<T> : IGenericRepository<T> where T : class
+public class GenerickiRepository<T> : IGenerickiRepository<T> where T : class
 {
     protected readonly EmployeeManagementDBContext _context;
 
-    public GenericRepository(EmployeeManagementDBContext context)
+    public GenerickiRepository(EmployeeManagementDBContext context)
     {
         _context = context;
     }
 
 
-    public virtual async Task<T> AddAsync(T entity)
+    public virtual async Task<T> DodajAsync(T entity)
     {
         var entry = await _context.AddAsync(entity);
 
         return entry.Entity;
     }
 
-    public virtual async Task<IEnumerable<T>> GetAllAsync()
+    public virtual async Task<IEnumerable<T>> VratiSveAsync()
     {
         return await _context.Set<T>().ToListAsync();
     }
 
-    public virtual async Task<T?> GetByIdAsync(int id)
+    public virtual async Task<T?> VratiPoIdAsync(int id)
     {
         return await _context.FindAsync<T>(id);
     }
 
-    public virtual T Update(T entity)
+    public virtual T Azuriraj(T entity)
     {
         return _context.Update(entity).Entity;
     }
 
-    public virtual async Task SaveChangesAsync()
+    public virtual async Task SacuvajPromeneAsync()
     {
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task ObrisiAsync(int id)
     {
         var entity = await _context.Set<T>().FindAsync(id);
 

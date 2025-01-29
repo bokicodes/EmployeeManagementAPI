@@ -1,6 +1,6 @@
 ﻿namespace EmployeeManagementAPI.DTOs.TipZadatka;
 
-public class UpdateTipZadatkaDTO
+public class AzurirajTipZadatkaDTO
 {
     public string NazivZad { get; set; }
     public string OpisZad { get; set; }

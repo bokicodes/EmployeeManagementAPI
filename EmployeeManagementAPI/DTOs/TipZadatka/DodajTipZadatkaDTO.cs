@@ -2,7 +2,7 @@
 
 namespace EmployeeManagementAPI.DTOs.TipZadatka;
 
-public class AddTipZadatkaDTO
+public class DodajTipZadatkaDTO
 {
     [Required]
     public string NazivZad { get; set; }

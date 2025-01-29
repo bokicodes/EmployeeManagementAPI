@@ -2,7 +2,7 @@
 
 namespace EmployeeManagementAPI.Data.Interfaces;
 
-public interface IOrgCelinaRepository : IGenericRepository<OrganizacionaCelina>
+public interface IOrgCelinaRepository : IGenerickiRepository<OrganizacionaCelina>
 {
-    Task<OrganizacionaCelina?> GetOrgCelinaWithAdditionalInfoAsync(int orgCelinaId);
+    Task<OrganizacionaCelina?> VratiOrgCelinuSaDetaljimaAsync(int orgCelinaId);
 }

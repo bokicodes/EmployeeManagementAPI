@@ -19,15 +19,15 @@ public class ZaposleniService : IZaposleniService
         _mapper = mapper;
     }
 
-    public async Task<ZaposleniDTO> AddZaposleniAsync(AddZaposleniDTO addZaposleniDto)
+    public async Task<ZaposleniDTO> DodajZaposlenogAsync(DodajZaposlenogDTO dodajZaposlenogDto)
     {
-        var zaposleni = _mapper.Map<Zaposleni>(addZaposleniDto);
+        var zaposleni = _mapper.Map<Zaposleni>(dodajZaposlenogDto);
 
-        var noviZaposleni = await _zaposleniRepo.AddAsync(zaposleni);
+        var noviZaposleni = await _zaposleniRepo.DodajAsync(zaposleni);
 
         try
         {
-            await _zaposleniRepo.SaveChangesAsync();
+            await _zaposleniRepo.SacuvajPromeneAsync();
         }
         catch (DbUpdateException)
         {
@@ -37,55 +37,55 @@ public class ZaposleniService : IZaposleniService
         return _mapper.Map<ZaposleniDTO>(noviZaposleni);
     }
 
-    public async Task DeleteZaposleniAsync(int id)
+    public async Task ObrisiZaposlenogAsync(int id)
     {
-        var zaposleni = await _zaposleniRepo.GetByIdAsync(id);
+        var zaposleni = await _zaposleniRepo.VratiPoIdAsync(id);
 
         if(zaposleni is null)
         {
             throw new EntityNotFoundException("Taj zaposleni ne postoji");
         }
 
-        await _zaposleniRepo.DeleteAsync(id);
-        await _zaposleniRepo.SaveChangesAsync();
+        await _zaposleniRepo.ObrisiAsync(id);
+        await _zaposleniRepo.SacuvajPromeneAsync();
     }
 
-    public async Task<IEnumerable<ZaposleniDTO>> GetAllZaposleniAsync()
+    public async Task<IEnumerable<ZaposleniDTO>> VratiSveZaposleneAsync()
     {
-        var listaZaposlenih = await _zaposleniRepo.GetAllAsync();
+        var listaZaposlenih = await _zaposleniRepo.VratiSveAsync();
 
         return _mapper.Map<IEnumerable<ZaposleniDTO>>(listaZaposlenih);
     }
 
-    public async Task<ZaposleniDTO> GetZaposleniByIdAsync(int id)
+    public async Task<ZaposleniDTO> VratiZaposlenogPoIdAsync(int id)
     {
-        var zaposleni = await _zaposleniRepo.GetByIdAsync(id);
+        var zaposleni = await _zaposleniRepo.VratiPoIdAsync(id);
 
         return _mapper.Map<ZaposleniDTO>(zaposleni);
     }
 
-    public async Task<ZaposleniMoreInfoDTO?> GetZaposleniWithAdditionalInfo(int id)
+    public async Task<ZaposleniDetaljnoDTO?> VratiZaposlenogSaDetaljimaAsync(int id)
     {
-        var zaposleni = await _zaposleniRepo.GetZaposleniWithAdditionalInfoAsync(id);
+        var zaposleni = await _zaposleniRepo.VratiZaposlenogSaDetaljimaAsync(id);
 
-        return _mapper.Map<ZaposleniMoreInfoDTO>(zaposleni);
+        return _mapper.Map<ZaposleniDetaljnoDTO>(zaposleni);
     }
 
-    public async Task UpdateZaposleniAsync(UpdateZaposleniDTO updateZaposleniDto)
+    public async Task AzurirajZaposlenogAsync(AzurirajZaposlenogDTO azurirajZaposlenogDto)
     {
-        var zaposleni = await _zaposleniRepo.GetByIdAsync(updateZaposleniDto.ZaposleniId);
+        var zaposleni = await _zaposleniRepo.VratiPoIdAsync(azurirajZaposlenogDto.ZaposleniId);
 
         if(zaposleni is null)
         {
             throw new EntityNotFoundException("Taj zaposleni ne postoji");
         }
 
-        _mapper.Map(updateZaposleniDto, zaposleni); 
-        _zaposleniRepo.Update(zaposleni);
+        _mapper.Map(azurirajZaposlenogDto, zaposleni); 
+        _zaposleniRepo.Azuriraj(zaposleni);
 
         try
         {
-            await _zaposleniRepo.SaveChangesAsync();
+            await _zaposleniRepo.SacuvajPromeneAsync();
         }
         catch (DbUpdateException)
         {

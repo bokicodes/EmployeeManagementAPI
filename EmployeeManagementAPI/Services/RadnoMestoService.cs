@@ -20,15 +20,15 @@ public class RadnoMestoService : IRadnoMestoService
         _mapper = mapper;
     }
 
-    public async Task<RadnoMestoDTO> AddRadnoMestoAsync(AddRadnoMestoDTO addRadnoMestoDto)
+    public async Task<RadnoMestoDTO> DodajRadnoMestoAsync(DodajRadnoMestoDTO dodajRadnoMestoDto)
     {
-        var radnoMesto = _mapper.Map<RadnoMesto>(addRadnoMestoDto);
+        var radnoMesto = _mapper.Map<RadnoMesto>(dodajRadnoMestoDto);
 
-        var novoRadnoMesto = await _radnoMestoRepo.AddAsync(radnoMesto);
+        var novoRadnoMesto = await _radnoMestoRepo.DodajAsync(radnoMesto);
 
         try
         {
-            await _radnoMestoRepo.SaveChangesAsync();
+            await _radnoMestoRepo.SacuvajPromeneAsync();
         }
         catch (DbUpdateException)
         {
@@ -38,48 +38,48 @@ public class RadnoMestoService : IRadnoMestoService
         return _mapper.Map<RadnoMestoDTO>(novoRadnoMesto);
     }
 
-    public async Task DeleteRadnoMestoAsync(int id)
+    public async Task ObrisiRadnoMestoAsync(int id)
     {
-        var radnoMesto = await _radnoMestoRepo.GetByIdAsync(id);
+        var radnoMesto = await _radnoMestoRepo.VratiPoIdAsync(id);
 
         if (radnoMesto is null)
         {
             throw new EntityNotFoundException("To radno mesto ne postoji");
         }
 
-        await _radnoMestoRepo.DeleteAsync(id);
-        await _radnoMestoRepo.SaveChangesAsync();
+        await _radnoMestoRepo.ObrisiAsync(id);
+        await _radnoMestoRepo.SacuvajPromeneAsync();
     }
 
-    public async Task<IEnumerable<RadnoMestoDTO>> GetAllRadnoMestoAsync()
+    public async Task<IEnumerable<RadnoMestoDTO>> VratiSvaRadnaMestaAsync()
     {
-        var listaRadnihMesta = await _radnoMestoRepo.GetAllAsync();
+        var listaRadnihMesta = await _radnoMestoRepo.VratiSveAsync();
 
         return _mapper.Map<IEnumerable<RadnoMestoDTO>>(listaRadnihMesta);
     }
 
-    public async Task<RadnoMestoMoreInfoDTO?> GetRadnoMestoByIdAsync(int id)
+    public async Task<RadnoMestoDetaljnoDTO?> VratiRadnoMestoPoIdAsync(int id)
     {
-        var radnoMesto = await _radnoMestoRepo.GetRadnoMestoWithAdditionalInfoAsync(id);
+        var radnoMesto = await _radnoMestoRepo.VratiRadnoMestoSaDetaljimaAsync(id);
 
-        return _mapper.Map<RadnoMestoMoreInfoDTO>(radnoMesto);
+        return _mapper.Map<RadnoMestoDetaljnoDTO>(radnoMesto);
     }
 
-    public async Task UpdateRadnoMestoAsync(UpdateRadnoMestoDTO updateRadnoMestoDto)
+    public async Task AzurirajRadnoMestoAsync(AzurirajRadnoMestoDTO azurirajRadnoMestoDto)
     {
-        var radnoMesto = await _radnoMestoRepo.GetByIdAsync(updateRadnoMestoDto.RadnoMestoId);
+        var radnoMesto = await _radnoMestoRepo.VratiPoIdAsync(azurirajRadnoMestoDto.RadnoMestoId);
 
         if (radnoMesto is null)
         {
             throw new EntityNotFoundException("To radno mesto ne postoji");
         }
 
-        _mapper.Map(updateRadnoMestoDto, radnoMesto);
-        _radnoMestoRepo.Update(radnoMesto);
+        _mapper.Map(azurirajRadnoMestoDto, radnoMesto);
+        _radnoMestoRepo.Azuriraj(radnoMesto);
 
         try
         {
-            await _radnoMestoRepo.SaveChangesAsync();
+            await _radnoMestoRepo.SacuvajPromeneAsync();
         }
         catch (DbUpdateException)
         {
@@ -87,9 +87,9 @@ public class RadnoMestoService : IRadnoMestoService
         }
     }
 
-    public async Task AddTipZadatkaForRadnoMestoAsync(int id, AddTipZadatkaDTO tipZadatkaDTO)
+    public async Task DodajTipZadatkaZaRadnoMestoAsync(int id, DodajTipZadatkaDTO tipZadatkaDTO)
     {
-        var radnoMesto = await _radnoMestoRepo.GetByIdAsync(id);
+        var radnoMesto = await _radnoMestoRepo.VratiPoIdAsync(id);
 
         if(radnoMesto == null)
         {
@@ -98,14 +98,14 @@ public class RadnoMestoService : IRadnoMestoService
 
         var tipZad = _mapper.Map<TipZadatka>(tipZadatkaDTO);
 
-        radnoMesto.AddTipZadatka(tipZad);
+        radnoMesto.DodajTipZadatka(tipZad);
 
-        await _radnoMestoRepo.SaveChangesAsync();
+        await _radnoMestoRepo.SacuvajPromeneAsync();
     }
 
-    public async Task UpdateTipZadatkaForRadnoMestoAsync(int id, int tipZadatkaId, UpdateTipZadatkaDTO updateTipZadatkaDTO)
+    public async Task AzurirajTipZadatkaZaRadnoMestoAsync(int id, int tipZadatkaId, AzurirajTipZadatkaDTO azurirajTipZadatkaDTO)
     {
-        var radnoMesto = await _radnoMestoRepo.GetRadnoMestoWithAdditionalInfoAsync(id);
+        var radnoMesto = await _radnoMestoRepo.VratiRadnoMestoSaDetaljimaAsync(id);
 
         if (radnoMesto is null)
         {
@@ -119,16 +119,16 @@ public class RadnoMestoService : IRadnoMestoService
             throw new EntityNotFoundException("Taj tip zadatka ne postoji");
         }
 
-        var noviZad = _mapper.Map<TipZadatka>(updateTipZadatkaDTO);
+        var noviZad = _mapper.Map<TipZadatka>(azurirajTipZadatkaDTO);
 
-        radnoMesto.UpdateTipZadatka(tipZad, noviZad);
+        radnoMesto.AzurirajTipZadatka(tipZad, noviZad);
 
-        await _radnoMestoRepo.SaveChangesAsync();
+        await _radnoMestoRepo.SacuvajPromeneAsync();
     }
 
-    public async Task DeleteTipZadatkaForRadnoMestoAsync(int id, int tipZadatkaId)
+    public async Task ObrisiTipZadatkaZaRadnoMestoAsync(int id, int tipZadatkaId)
     {
-        var radnoMesto = await _radnoMestoRepo.GetRadnoMestoWithAdditionalInfoAsync(id);
+        var radnoMesto = await _radnoMestoRepo.VratiRadnoMestoSaDetaljimaAsync(id);
 
         if (radnoMesto is null)
         {
@@ -142,14 +142,14 @@ public class RadnoMestoService : IRadnoMestoService
             throw new EntityNotFoundException("Taj tip zadatka ne postoji");
         }
 
-        radnoMesto.DeleteTipZadatka(tipZad);
+        radnoMesto.ObrisiTipZadatka(tipZad);
 
-        await _radnoMestoRepo.SaveChangesAsync();
+        await _radnoMestoRepo.SacuvajPromeneAsync();
     }
 
-    public async Task<RadnoMestoDTO> GetRadnoMestoByTipZadatkaIdAsync(int zadatakId)
+    public async Task<RadnoMestoDTO> VratiRadnoMestoPoTipuZadatkaIdAsync(int zadatakId)
     {
-        var radnoMesto = await _radnoMestoRepo.GetRadnoMestoByTipZadatkaIdAsync(zadatakId);
+        var radnoMesto = await _radnoMestoRepo.VratiRadnoMestoPoTipuZadatkaIdAsync(zadatakId);
 
         return _mapper.Map<RadnoMestoDTO>(radnoMesto);
     }

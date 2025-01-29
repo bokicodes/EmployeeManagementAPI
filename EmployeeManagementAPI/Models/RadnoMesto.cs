@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace EmployeeManagementAPI.Models
+﻿namespace EmployeeManagementAPI.Models
 {
     public partial class RadnoMesto
     {
@@ -19,17 +16,17 @@ namespace EmployeeManagementAPI.Models
         public virtual ICollection<Zaposleni> Zaposleni { get; set; }
 
 
-        public void AddTipZadatka(TipZadatka tipZadatka)
+        public void DodajTipZadatka(TipZadatka tipZadatka)
         {
             TipoviZadataka.Add(tipZadatka);
         }
 
-        public void UpdateTipZadatka(TipZadatka stariZadatak, TipZadatka noviZadatak)
+        public void AzurirajTipZadatka(TipZadatka stariZadatak, TipZadatka noviZadatak)
         {
-            stariZadatak.Update(noviZadatak);
+            stariZadatak.Azuriraj(noviZadatak);
         }
 
-        public void DeleteTipZadatka(TipZadatka tipZadatka)
+        public void ObrisiTipZadatka(TipZadatka tipZadatka)
         {
             TipoviZadataka.Remove(tipZadatka);
         }

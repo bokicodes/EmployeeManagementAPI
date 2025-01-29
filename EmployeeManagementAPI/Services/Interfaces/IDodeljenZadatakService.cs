@@ -1,15 +1,14 @@
 ﻿using EmployeeManagementAPI.DTOs.DodeljenZadatak;
-using EmployeeManagementAPI.DTOs.Zaposleni;
 
 namespace EmployeeManagementAPI.Services.Interfaces;
 
 public interface IDodeljenZadatakService
 {
-    Task<IEnumerable<DodeljenZadatakDTO>> GetAllDodeljeniZadaciAsync(int zaposleniId);
-    Task<DodeljenZadatakDTO> GetDodeljenZadatakByIdsAsync(int zaposleniId, int zadatakId);
-    Task<DodeljenZadatakDTO> AddDodeljenZadatakAsync(int zaposleniId, int zadatakId,
-        AddDodeljenZadatakDTO addDodeljenZadatakDto);
-    Task UpdateDodeljenZadatakAsync(int zaposleniId, int zadatakId, 
-        UpdateDodeljenZadatakDTO updateDodeljenZadatakDto);
-    Task DeleteDodeljenZadatakAsync(int zaposleniId, int zadatakId);
+    Task<IEnumerable<DodeljenZadatakDTO>> VratiSveDodeljeneZadatkeAsync(int zaposleniId);
+    Task<DodeljenZadatakDTO> VratiDodeljenZadatakPoIdsAsync(int zaposleniId, int zadatakId);
+    Task<DodeljenZadatakDTO> DodeliZadatakAsync(int zaposleniId, int zadatakId,
+        DodeliZadatakDTO dodeliZadatakDto);
+    Task AzurirajDodeljenZadatakAsync(int zaposleniId, int zadatakId, 
+        AzurirajDodeljenZadatakDTO azurirajDodeljenZadatakDto);
+    Task ObrisiDodeljenZadatakAsync(int zaposleniId, int zadatakId);
 }

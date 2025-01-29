@@ -1,6 +1,6 @@
 ﻿namespace EmployeeManagementAPI.DTOs.Zaposleni;
 
-public class ZaposleniMoreInfoDTO
+public class ZaposleniDetaljnoDTO
 {
     public int ZaposleniId { get; set; }
     public string Ime { get; set; } = null!;

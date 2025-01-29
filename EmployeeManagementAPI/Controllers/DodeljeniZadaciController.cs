@@ -24,13 +24,13 @@ public class DodeljeniZadaciController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllDodeljeniZadaci(int zaposleniId)
+    public async Task<IActionResult> VratiSveDodeljeneZadatke(int zaposleniId)
     {
         _logger.LogInformation("Poziva se metoda za vracanje svih dodeljenih zadataka zaposlenom...");
 
         try
         {
-            var listaDodeljenihZadataka = await _dodeljenZadatakService.GetAllDodeljeniZadaciAsync(zaposleniId);
+            var listaDodeljenihZadataka = await _dodeljenZadatakService.VratiSveDodeljeneZadatkeAsync(zaposleniId);
 
             return Ok(listaDodeljenihZadataka);
         }
@@ -42,15 +42,15 @@ public class DodeljeniZadaciController : ControllerBase
 
     }
 
-    [HttpGet("{zadatakId:int}", Name = "GetDodeljenZadatakById")]
-    public async Task<IActionResult> GetDodeljenZadatakById(int zaposleniId, int zadatakId)
+    [HttpGet("{zadatakId:int}")]
+    public async Task<IActionResult> VratiDodeljenZadatakPoId(int zaposleniId, int zadatakId)
     {
         _logger.LogInformation("Poziva se metoda za vracanje dodeljenog zadatka zaposlenom...");
 
         try
         {
             var dodeljenZadatakDto = await _dodeljenZadatakService
-                .GetDodeljenZadatakByIdsAsync(zaposleniId, zadatakId);
+                .VratiDodeljenZadatakPoIdsAsync(zaposleniId, zadatakId);
 
             _logger.LogInformation("Dodeljen zadatak je pronadjen.");
             return Ok(dodeljenZadatakDto);
@@ -64,8 +64,8 @@ public class DodeljeniZadaciController : ControllerBase
     }
 
     [HttpPost("{zadatakId:int}")]
-    public async Task<IActionResult> AddDodeljenZadatak(int zaposleniId, int zadatakId,
-        [FromBody] AddDodeljenZadatakDTO addDodeljenZadatakDTO)
+    public async Task<IActionResult> DodeliZadatak(int zaposleniId, int zadatakId,
+        [FromBody] DodeliZadatakDTO dodeliZadatakDto)
     {
         if (!ModelState.IsValid)
         {
@@ -75,7 +75,7 @@ public class DodeljeniZadaciController : ControllerBase
         try
         {
             var dodeljenZadatakDto = await _dodeljenZadatakService
-                .AddDodeljenZadatakAsync(zaposleniId, zadatakId, addDodeljenZadatakDTO);
+                .DodeliZadatakAsync(zaposleniId, zadatakId, dodeliZadatakDto);
 
             _logger.LogInformation("Zadatak je dodeljen zaposlenom.");
 
@@ -99,8 +99,8 @@ public class DodeljeniZadaciController : ControllerBase
     }
 
     [HttpPut("{zadatakId:int}")]
-    public async Task<IActionResult> UpdateDodeljenZadatak(int zaposleniId, int zadatakId,
-        [FromBody] UpdateDodeljenZadatakDTO updateDodeljenZadatakDTO)
+    public async Task<IActionResult> AzurirajDodeljenZadatak(int zaposleniId, int zadatakId,
+        [FromBody] AzurirajDodeljenZadatakDTO azurirajDodeljenZadatakDto)
     {
         if (!ModelState.IsValid)
         {
@@ -110,7 +110,7 @@ public class DodeljeniZadaciController : ControllerBase
         try
         {
             await _dodeljenZadatakService
-                .UpdateDodeljenZadatakAsync(zaposleniId, zadatakId, updateDodeljenZadatakDTO);
+                .AzurirajDodeljenZadatakAsync(zaposleniId, zadatakId, azurirajDodeljenZadatakDto);
 
             _logger.LogInformation("Dodeljen zadatak je azuriran.");
 
@@ -129,11 +129,11 @@ public class DodeljeniZadaciController : ControllerBase
     }
 
     [HttpDelete("{zadatakId:int}")]
-    public async Task<IActionResult> DeleteDodeljenZadatak(int zaposleniId, int zadatakId)
+    public async Task<IActionResult> ObrisiDodeljenZadatak(int zaposleniId, int zadatakId)
     {
         try
         {
-            await _dodeljenZadatakService.DeleteDodeljenZadatakAsync(zaposleniId, zadatakId);
+            await _dodeljenZadatakService.ObrisiDodeljenZadatakAsync(zaposleniId, zadatakId);
 
             _logger.LogInformation("Dodeljen zadatak je obrisan.");
 

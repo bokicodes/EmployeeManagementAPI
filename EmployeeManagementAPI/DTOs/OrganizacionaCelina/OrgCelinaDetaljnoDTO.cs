@@ -2,7 +2,7 @@
 
 namespace EmployeeManagementAPI.DTOs.OrganizacionaCelina;
 
-public class OrgCelinaMoreInfoDTO
+public class OrgCelinaDetaljnoDTO
 {
     public int OrgCelinaId { get; set; }
     public string NazivOC { get; set; }

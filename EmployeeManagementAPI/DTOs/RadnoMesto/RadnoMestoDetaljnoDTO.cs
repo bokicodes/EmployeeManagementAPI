@@ -3,7 +3,7 @@ using EmployeeManagementAPI.DTOs.Zaposleni;
 
 namespace EmployeeManagementAPI.DTOs.RadnoMesto;
 
-public class RadnoMestoMoreInfoDTO
+public class RadnoMestoDetaljnoDTO
 {
     public int RadnoMestoId { get; set; }
     public string NazivRM { get; set; }

@@ -4,20 +4,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementAPI.Data.Repositories;
 
-public class RadnoMestoRepository : GenericRepository<RadnoMesto>, IRadnoMestoRepository
+public class RadnoMestoRepository : GenerickiRepository<RadnoMesto>, IRadnoMestoRepository
 {
     public RadnoMestoRepository(EmployeeManagementDBContext context) : base(context)
     {
     }
 
-    public async Task<RadnoMesto?> GetRadnoMestoByTipZadatkaIdAsync(int zadatakId)
+    public async Task<RadnoMesto?> VratiRadnoMestoPoTipuZadatkaIdAsync(int zadatakId)
     {
         return await _context.RadnaMesta
             .Where(rm => rm.TipoviZadataka.Any(tz => tz.ZadatakId == zadatakId))
             .FirstOrDefaultAsync();
     }
 
-    public async Task<RadnoMesto?> GetRadnoMestoWithAdditionalInfoAsync(int radnoMestoId)
+    public async Task<RadnoMesto?> VratiRadnoMestoSaDetaljimaAsync(int radnoMestoId)
     {
         return await _context.RadnaMesta.Where(rm => rm.RadnoMestoId == radnoMestoId)
             .Include(rm => rm.Zaposleni).Include(rm => rm.TipoviZadataka)

@@ -5,13 +5,13 @@ namespace EmployeeManagementAPI.Services.Interfaces;
 
 public interface IRadnoMestoService
 {
-    Task<IEnumerable<RadnoMestoDTO>> GetAllRadnoMestoAsync();
-    Task<RadnoMestoMoreInfoDTO?> GetRadnoMestoByIdAsync(int id);
-    Task<RadnoMestoDTO> GetRadnoMestoByTipZadatkaIdAsync(int zadatakId);
-    Task<RadnoMestoDTO> AddRadnoMestoAsync(AddRadnoMestoDTO addRadnoMestoDto);
-    Task UpdateRadnoMestoAsync(UpdateRadnoMestoDTO updateRadnoMestoDto);
-    Task DeleteRadnoMestoAsync(int id);
-    Task AddTipZadatkaForRadnoMestoAsync(int id, AddTipZadatkaDTO tipZadatkaDTO);
-    Task UpdateTipZadatkaForRadnoMestoAsync(int id, int tipZadatkaId, UpdateTipZadatkaDTO updateTipZadatkaDTO);
-    Task DeleteTipZadatkaForRadnoMestoAsync(int id,  int tipZadatkaId);
+    Task<IEnumerable<RadnoMestoDTO>> VratiSvaRadnaMestaAsync();
+    Task<RadnoMestoDetaljnoDTO?> VratiRadnoMestoPoIdAsync(int id);
+    Task<RadnoMestoDTO> VratiRadnoMestoPoTipuZadatkaIdAsync(int zadatakId);
+    Task<RadnoMestoDTO> DodajRadnoMestoAsync(DodajRadnoMestoDTO dodajRadnoMestoDto);
+    Task AzurirajRadnoMestoAsync(AzurirajRadnoMestoDTO azurirajRadnoMestoDto);
+    Task ObrisiRadnoMestoAsync(int id);
+    Task DodajTipZadatkaZaRadnoMestoAsync(int id, DodajTipZadatkaDTO dodajTipZadatkaDTO);
+    Task AzurirajTipZadatkaZaRadnoMestoAsync(int id, int tipZadatkaId, AzurirajTipZadatkaDTO azurirajTipZadatkaDTO);
+    Task ObrisiTipZadatkaZaRadnoMestoAsync(int id,  int tipZadatkaId);
 }

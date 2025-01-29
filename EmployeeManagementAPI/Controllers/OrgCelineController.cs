@@ -20,21 +20,21 @@ public class OrgCelineController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllOrgCelina()
+    public async Task<IActionResult> VratiSveOrgCeline()
     {
         _logger.LogInformation("Poziva se metoda za vracanje svih organizacionih celina...");
 
-        var listaOrgCelinaDTO = await _orgCelinaService.GetAllOrgCelinaAsync();
+        var listaOrgCelinaDTO = await _orgCelinaService.VratiSveOrgCelineAsync();
 
         return Ok(listaOrgCelinaDTO);
     }
 
-    [HttpGet("{id}", Name = "GetOrgCelinaById")]
-    public async Task<IActionResult> GetOrgCelinaById([FromRoute] int id)
+    [HttpGet("{id}", Name = "VratiOrgCelinuPoId")]
+    public async Task<IActionResult> VratiOrgCelinuPoId([FromRoute] int id)
     {
         _logger.LogInformation("Poziva se metoda za vracanje organizacione celine sa dodatnim informacijama...");
 
-        var orgCelinaDto = await _orgCelinaService.GetOrgCelinaByIdAsync(id);
+        var orgCelinaDto = await _orgCelinaService.VratiOrgCelinuPoIdAsync(id);
 
         if (orgCelinaDto is null)
         {
@@ -47,7 +47,7 @@ public class OrgCelineController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddOrgCelina([FromBody] AddOrgCelinaDTO addOrgCelinaDto)
+    public async Task<IActionResult> DodajOrgCelinu([FromBody] DodajOrgCelinuDTO dodajOrgCelinuDto)
     {
         if (!ModelState.IsValid)
         {
@@ -56,11 +56,11 @@ public class OrgCelineController : ControllerBase
 
         try
         {
-            var orgCelinaDto = await _orgCelinaService.AddOrgCelinaAsync(addOrgCelinaDto);
+            var orgCelinaDto = await _orgCelinaService.DodajOrgCelinuAsync(dodajOrgCelinuDto);
 
-            _logger.LogInformation("Organizaciona celina je dodato.");
+            _logger.LogInformation("Organizaciona celina je dodata.");
 
-            return CreatedAtRoute("GetOrgCelinaById", new { id = orgCelinaDto.OrgCelinaId }, orgCelinaDto);
+            return CreatedAtRoute("VratiOrgCelinuPoId", new { id = orgCelinaDto.OrgCelinaId }, orgCelinaDto);
         }
         catch (DbUpdateException)
         {
@@ -70,7 +70,7 @@ public class OrgCelineController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateOrgCelina(int id, [FromBody] UpdateOrgCelinaDTO updateOrgCelinaDto)
+    public async Task<IActionResult> AzurirajOrgCelinu(int id, [FromBody] AzurirajOrgCelinuDTO azurirajOrgCelinuDto)
     {
         if (!ModelState.IsValid)
         {
@@ -79,8 +79,8 @@ public class OrgCelineController : ControllerBase
 
         try
         {
-            updateOrgCelinaDto.OrgCelinaId = id;
-            await _orgCelinaService.UpdateOrgCelinaAsync(updateOrgCelinaDto);
+            azurirajOrgCelinuDto.OrgCelinaId = id;
+            await _orgCelinaService.AzurirajOrgCelinuAsync(azurirajOrgCelinuDto);
 
             _logger.LogInformation("Organizaciona celina je azurirana.");
 
@@ -99,11 +99,11 @@ public class OrgCelineController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteOrgCelina(int id)
+    public async Task<IActionResult> ObrisiOrgCelinu(int id)
     {
         try
         {
-            await _orgCelinaService.DeleteOrgCelinaAsync(id);
+            await _orgCelinaService.ObrisiOrgCelinuAsync(id);
 
             _logger.LogInformation("Organizaciona celina je obrisana.");
 

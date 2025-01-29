@@ -22,21 +22,21 @@ public class RadnaMestaController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllRadnoMesto()
+    public async Task<IActionResult> VratiSvaRadnaMesta()
     {
         _logger.LogInformation("Poziva se metoda za vracanje svih radnih mesta...");
 
-        var listaRadnihMestaDTO = await _radnoMestoService.GetAllRadnoMestoAsync();
+        var listaRadnihMestaDTO = await _radnoMestoService.VratiSvaRadnaMestaAsync();
 
         return Ok(listaRadnihMestaDTO);
     }
 
-    [HttpGet("{id}", Name = "GetRadnoMestoById")]
-    public async Task<IActionResult> GetRadnoMestoById([FromRoute] int id)
+    [HttpGet("{id}", Name = "VratiRadnoMestoPoId")]
+    public async Task<IActionResult> VratiRadnoMestoPoId([FromRoute] int id)
     {
         _logger.LogInformation("Poziva se metoda za vracanje radnog mesta sa dodatnim informacijama...");
 
-        var radnoMestoDto = await _radnoMestoService.GetRadnoMestoByIdAsync(id);
+        var radnoMestoDto = await _radnoMestoService.VratiRadnoMestoPoIdAsync(id);
 
         if (radnoMestoDto is null)
         {
@@ -49,7 +49,7 @@ public class RadnaMestaController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddRadnoMesto([FromBody] AddRadnoMestoDTO addRadnoMestoDto)
+    public async Task<IActionResult> DodajRadnoMesto([FromBody] DodajRadnoMestoDTO dodajRadnoMestoDto)
     {
         if (!ModelState.IsValid)
         {
@@ -58,11 +58,11 @@ public class RadnaMestaController : ControllerBase
 
         try
         {
-            var radnoMestoDto = await _radnoMestoService.AddRadnoMestoAsync(addRadnoMestoDto);
+            var radnoMestoDto = await _radnoMestoService.DodajRadnoMestoAsync(dodajRadnoMestoDto);
 
             _logger.LogInformation("Radno mesto je dodato.");
 
-            return CreatedAtRoute("GetRadnoMestoById", new { id = radnoMestoDto.RadnoMestoId }, radnoMestoDto);
+            return CreatedAtRoute("VratiRadnoMestoPoId", new { id = radnoMestoDto.RadnoMestoId }, radnoMestoDto);
         }
         catch (DbUpdateException)
         {
@@ -72,7 +72,7 @@ public class RadnaMestaController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateRadnoMesto(int id, [FromBody] UpdateRadnoMestoDTO updateRadnoMestoDto)
+    public async Task<IActionResult> AzurirajRadnoMesto(int id, [FromBody] AzurirajRadnoMestoDTO azurirajRadnoMestoDto)
     {
         if (!ModelState.IsValid)
         {
@@ -81,8 +81,8 @@ public class RadnaMestaController : ControllerBase
 
         try
         {
-            updateRadnoMestoDto.RadnoMestoId = id;
-            await _radnoMestoService.UpdateRadnoMestoAsync(updateRadnoMestoDto);
+            azurirajRadnoMestoDto.RadnoMestoId = id;
+            await _radnoMestoService.AzurirajRadnoMestoAsync(azurirajRadnoMestoDto);
 
             _logger.LogInformation("Radno mesto je azurirano.");
 
@@ -101,11 +101,11 @@ public class RadnaMestaController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteRadnoMesto(int id)
+    public async Task<IActionResult> ObrisiRadnoMesto(int id)
     {
         try
         {
-            await _radnoMestoService.DeleteRadnoMestoAsync(id);
+            await _radnoMestoService.ObrisiRadnoMestoAsync(id);
 
             _logger.LogInformation("Radno mesto je obrisano.");
 
@@ -122,7 +122,7 @@ public class RadnaMestaController : ControllerBase
     // Tipovi zadataka
 
     [HttpPost("{id}/tipovi-zadataka")]
-    public async Task<IActionResult> AddTipZadatka(int id, [FromBody] AddTipZadatkaDTO addTipZadatkaDto)
+    public async Task<IActionResult> DodajTipZadatka(int id, [FromBody] DodajTipZadatkaDTO dodajTipZadatkaDto)
     {
         if (!ModelState.IsValid)
         {
@@ -131,7 +131,7 @@ public class RadnaMestaController : ControllerBase
 
         try
         {
-            await _radnoMestoService.AddTipZadatkaForRadnoMestoAsync(id, addTipZadatkaDto);
+            await _radnoMestoService.DodajTipZadatkaZaRadnoMestoAsync(id, dodajTipZadatkaDto);
 
             return Ok(new { message = "Tip zadatka je uspesno dodat" });
         }
@@ -147,8 +147,8 @@ public class RadnaMestaController : ControllerBase
         }
     }
 
-    [HttpPut("{id}/tipovi-zadataka/{zadId}")]
-    public async Task<IActionResult> UpdateTipZadatka(int id, int zadId, [FromBody] UpdateTipZadatkaDTO updateTipZadatkaDto)
+    [HttpPut("{id}/tipovi-zadataka/{zadatakId}")]
+    public async Task<IActionResult> AzurirajTipZadatka(int id, int zadatakId, [FromBody] AzurirajTipZadatkaDTO azurirajTipZadatkaDto)
     {
         if (!ModelState.IsValid)
         {
@@ -157,7 +157,7 @@ public class RadnaMestaController : ControllerBase
 
         try
         {
-            await _radnoMestoService.UpdateTipZadatkaForRadnoMestoAsync(id, zadId, updateTipZadatkaDto);
+            await _radnoMestoService.AzurirajTipZadatkaZaRadnoMestoAsync(id, zadatakId, azurirajTipZadatkaDto);
 
             return NoContent();
         }
@@ -173,8 +173,8 @@ public class RadnaMestaController : ControllerBase
         }
     }
 
-    [HttpDelete("{id}/tipovi-zadataka/{zadId}")]
-    public async Task<IActionResult> DeleteTipZadatka(int id, int zadId)
+    [HttpDelete("{id}/tipovi-zadataka/{zadatakId}")]
+    public async Task<IActionResult> ObrisiTipZadatka(int id, int zadatakId)
     {
         if (!ModelState.IsValid)
         {
@@ -183,7 +183,7 @@ public class RadnaMestaController : ControllerBase
 
         try
         {
-            await _radnoMestoService.DeleteTipZadatkaForRadnoMestoAsync(id, zadId);
+            await _radnoMestoService.ObrisiTipZadatkaZaRadnoMestoAsync(id, zadatakId);
 
             return NoContent();
         }
