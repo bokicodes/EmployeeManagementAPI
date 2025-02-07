@@ -29,13 +29,13 @@ public class DodeljenZadatakRepository : IDodeljenZadatakRepository
     public async Task<IEnumerable<DodeljenZadatak>> VratiSveAsync(int zaposleniId)
     {
         return await _context.DodeljeniZadaci.Where(dz => dz.ZaposleniId == zaposleniId)
-            .Include(dz => dz.TipZadatka)
+            .Include(dz => dz.Zadatak)
             .ToListAsync();
     }
 
     public async Task<DodeljenZadatak?> VratiPoIdsAsync(int zaposleniId, int zadatakId)
     {
-        return await _context.DodeljeniZadaci.Include(dz => dz.TipZadatka)
+        return await _context.DodeljeniZadaci.Include(dz => dz.Zadatak)
             .FirstOrDefaultAsync(dz => dz.ZaposleniId == zaposleniId
                 && dz.ZadatakId == zadatakId);
     }

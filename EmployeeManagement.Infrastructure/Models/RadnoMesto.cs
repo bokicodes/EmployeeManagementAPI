@@ -4,7 +4,7 @@
     {
         public RadnoMesto()
         {
-            TipoviZadataka = new List<TipZadatka>();
+            Zadaci = new List<Zadatak>();
             Zaposleni = new List<Zaposleni>();
         }
 
@@ -12,23 +12,23 @@
         public string NazivRM { get; set; } = null!;
         public string OpisRM { get; set; } = null!;
 
-        public virtual ICollection<TipZadatka> TipoviZadataka { get; set; }
+        public virtual ICollection<Zadatak> Zadaci { get; set; }
         public virtual ICollection<Zaposleni> Zaposleni { get; set; }
 
 
-        public void DodajTipZadatka(TipZadatka tipZadatka)
+        public void DodajZadatak(Zadatak zadatak)
         {
-            TipoviZadataka.Add(tipZadatka);
+            Zadaci.Add(zadatak);
         }
 
-        public void AzurirajTipZadatka(TipZadatka stariZadatak, TipZadatka noviZadatak)
+        public void AzurirajZadatak(Zadatak stariZadatak, Zadatak noviZadatak)
         {
             stariZadatak.Azuriraj(noviZadatak);
         }
 
-        public void ObrisiTipZadatka(TipZadatka tipZadatka)
+        public void ObrisiZadatak(Zadatak zadatak)
         {
-            TipoviZadataka.Remove(tipZadatka);
+            Zadaci.Remove(zadatak);
         }
     }
 }

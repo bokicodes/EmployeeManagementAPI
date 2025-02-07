@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EmployeeManagement.Business.DTOs.TipZadatka;
+namespace EmployeeManagement.Business.DTOs.Zadatak;
 
-public class DodajTipZadatkaDTO
+public class DodajZadatakDTO
 {
     [Required]
     public string NazivZad { get; set; }

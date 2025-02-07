@@ -41,7 +41,7 @@ public class DodeljenZadatakService : IDodeljenZadatakService
         dodeljenZadatak.ZaposleniId = zaposleniId;
         dodeljenZadatak.ZadatakId = zadatakId;
         dodeljenZadatak.RadnoMestoId = (await _radnoMestoRepo
-            .VratiRadnoMestoPoTipuZadatkaIdAsync(zadatakId))!.RadnoMestoId;
+            .VratiRadnoMestoPoZadatkuIdAsync(zadatakId))!.RadnoMestoId;
 
         var noviDodeljenZadatak = await _dodeljenZadatakRepo.DodajAsync(dodeljenZadatak);
 
@@ -130,9 +130,9 @@ public class DodeljenZadatakService : IDodeljenZadatakService
             throw new EntityNotFoundException("Taj zaposleni ne postoji");
         }
 
-        if (await _radnoMestoRepo.VratiRadnoMestoPoTipuZadatkaIdAsync(zadatakId) is null)
+        if (await _radnoMestoRepo.VratiRadnoMestoPoZadatkuIdAsync(zadatakId) is null)
         {
-            throw new EntityNotFoundException("Taj tip zadatka ne postoji");
+            throw new EntityNotFoundException("Taj zadatak ne postoji");
         }
     }
 }

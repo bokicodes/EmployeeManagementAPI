@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using EmployeeManagement.Business.CustomExceptions;
 using EmployeeManagement.Business.DTOs.RadnoMesto;
-using EmployeeManagement.Business.DTOs.TipZadatka;
+using EmployeeManagement.Business.DTOs.Zadatak;
 using EmployeeManagement.Business.ServiceInterfaces;
 using EmployeeManagement.Infrastructure.Models;
 using EmployeeManagement.Infrastructure.RepositoryInterfaces;
@@ -87,7 +87,7 @@ public class RadnoMestoService : IRadnoMestoService
         }
     }
 
-    public async Task DodajTipZadatkaZaRadnoMestoAsync(int id, DodajTipZadatkaDTO tipZadatkaDTO)
+    public async Task DodajZadatakZaRadnoMestoAsync(int id, DodajZadatakDTO dodajZadatakDto)
     {
         var radnoMesto = await _radnoMestoRepo.VratiPoIdAsync(id);
 
@@ -96,14 +96,14 @@ public class RadnoMestoService : IRadnoMestoService
             throw new EntityNotFoundException("To radno mesto ne postoji");
         }
 
-        var tipZad = _mapper.Map<TipZadatka>(tipZadatkaDTO);
+        var zad = _mapper.Map<Zadatak>(dodajZadatakDto);
 
-        radnoMesto.DodajTipZadatka(tipZad);
+        radnoMesto.DodajZadatak(zad);
 
         await _radnoMestoRepo.SacuvajPromeneAsync();
     }
 
-    public async Task AzurirajTipZadatkaZaRadnoMestoAsync(int id, int tipZadatkaId, AzurirajTipZadatkaDTO azurirajTipZadatkaDTO)
+    public async Task AzurirajZadatakZaRadnoMestoAsync(int id, int zadatakId, AzurirajZadatakDTO azurirajZadatakDto)
     {
         var radnoMesto = await _radnoMestoRepo.VratiRadnoMestoSaDetaljimaAsync(id);
 
@@ -112,21 +112,21 @@ public class RadnoMestoService : IRadnoMestoService
             throw new EntityNotFoundException("To radno mesto ne postoji");
         }
 
-        var tipZad = radnoMesto.TipoviZadataka.FirstOrDefault(z => z.ZadatakId == tipZadatkaId);
+        var zad = radnoMesto.Zadaci.FirstOrDefault(z => z.ZadatakId == zadatakId);
 
-        if(tipZad is null)
+        if(zad is null)
         {
-            throw new EntityNotFoundException("Taj tip zadatka ne postoji");
+            throw new EntityNotFoundException("Taj zadatak ne postoji");
         }
 
-        var noviZad = _mapper.Map<TipZadatka>(azurirajTipZadatkaDTO);
+        var noviZad = _mapper.Map<Zadatak>(azurirajZadatakDto);
 
-        radnoMesto.AzurirajTipZadatka(tipZad, noviZad);
+        radnoMesto.AzurirajZadatak(zad, noviZad);
 
         await _radnoMestoRepo.SacuvajPromeneAsync();
     }
 
-    public async Task ObrisiTipZadatkaZaRadnoMestoAsync(int id, int tipZadatkaId)
+    public async Task ObrisiZadatakZaRadnoMestoAsync(int id, int zadatakId)
     {
         var radnoMesto = await _radnoMestoRepo.VratiRadnoMestoSaDetaljimaAsync(id);
 
@@ -135,21 +135,21 @@ public class RadnoMestoService : IRadnoMestoService
             throw new EntityNotFoundException("To radno mesto ne postoji");
         }
 
-        var tipZad = radnoMesto.TipoviZadataka.FirstOrDefault(z => z.ZadatakId == tipZadatkaId);
+        var zad = radnoMesto.Zadaci.FirstOrDefault(z => z.ZadatakId == zadatakId);
 
-        if (tipZad is null)
+        if (zad is null)
         {
-            throw new EntityNotFoundException("Taj tip zadatka ne postoji");
+            throw new EntityNotFoundException("Taj zadatak ne postoji");
         }
 
-        radnoMesto.ObrisiTipZadatka(tipZad);
+        radnoMesto.ObrisiZadatak(zad);
 
         await _radnoMestoRepo.SacuvajPromeneAsync();
     }
 
-    public async Task<RadnoMestoDTO> VratiRadnoMestoPoTipuZadatkaIdAsync(int zadatakId)
+    public async Task<RadnoMestoDTO> VratiRadnoMestoPoZadatkuIdAsync(int zadatakId)
     {
-        var radnoMesto = await _radnoMestoRepo.VratiRadnoMestoPoTipuZadatkaIdAsync(zadatakId);
+        var radnoMesto = await _radnoMestoRepo.VratiRadnoMestoPoZadatkuIdAsync(zadatakId);
 
         return _mapper.Map<RadnoMestoDTO>(radnoMesto);
     }

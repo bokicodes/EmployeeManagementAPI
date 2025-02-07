@@ -17,7 +17,7 @@ namespace EmployeeManagement.Infrastructure.DatabaseContext
         public virtual DbSet<DodeljenZadatak> DodeljeniZadaci { get; set; } = null!;
         public virtual DbSet<OrganizacionaCelina> OrganizacioneCeline { get; set; } = null!;
         public virtual DbSet<RadnoMesto> RadnaMesta { get; set; } = null!;
-        public virtual DbSet<TipZadatka> TipoviZadataka { get; set; } = null!;
+        public virtual DbSet<Zadatak> Zadaci { get; set; } = null!;
         public virtual DbSet<Zaposleni> Zaposleni { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -38,11 +38,11 @@ namespace EmployeeManagement.Infrastructure.DatabaseContext
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_DodeljenZadatak_Zaposleni");
 
-                entity.HasOne(d => d.TipZadatka)
+                entity.HasOne(d => d.Zadatak)
                     .WithMany(p => p.DodeljeniZadaci)
                     .HasForeignKey(d => new { d.RadnoMestoId, d.ZadatakId })
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_DodeljenZadatak_TipZadatka");
+                    .HasConstraintName("FK_DodeljenZadatak_Zadatak");
             });
 
             modelBuilder.Entity<OrganizacionaCelina>(entity =>
@@ -77,11 +77,11 @@ namespace EmployeeManagement.Infrastructure.DatabaseContext
                     .HasColumnName("OpisRM");
             });
 
-            modelBuilder.Entity<TipZadatka>(entity =>
+            modelBuilder.Entity<Zadatak>(entity =>
             {
                 entity.HasKey(e => new { e.RadnoMestoId, e.ZadatakId });
 
-                entity.ToTable("TipZadatka");
+                entity.ToTable("Zadatak");
 
                 entity.Property(e => e.ZadatakId).ValueGeneratedOnAdd();
 
@@ -94,10 +94,10 @@ namespace EmployeeManagement.Infrastructure.DatabaseContext
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.RadnoMesto)
-                    .WithMany(p => p.TipoviZadataka)
+                    .WithMany(p => p.Zadaci)
                     .HasForeignKey(d => d.RadnoMestoId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_TipZadatka_RadnoMesto");
+                    .HasConstraintName("FK_Zadatak_RadnoMesto");
             });
 
             modelBuilder.Entity<Zaposleni>(entity =>

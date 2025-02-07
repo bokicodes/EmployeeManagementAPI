@@ -1,6 +1,6 @@
 ﻿using EmployeeManagement.Business.CustomExceptions;
 using EmployeeManagement.Business.DTOs.RadnoMesto;
-using EmployeeManagement.Business.DTOs.TipZadatka;
+using EmployeeManagement.Business.DTOs.Zadatak;
 using EmployeeManagement.Business.ServiceInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -118,10 +118,10 @@ public class RadnaMestaController : ControllerBase
     }
 
 
-    // Tipovi zadataka
+    // Zadaci
 
-    [HttpPost("{id}/tipovi-zadataka")]
-    public async Task<IActionResult> DodajTipZadatka(int id, [FromBody] DodajTipZadatkaDTO dodajTipZadatkaDto)
+    [HttpPost("{id}/zadaci")]
+    public async Task<IActionResult> DodajZadatak(int id, [FromBody] DodajZadatakDTO dodajZadatakDto)
     {
         if (!ModelState.IsValid)
         {
@@ -130,9 +130,9 @@ public class RadnaMestaController : ControllerBase
 
         try
         {
-            await _radnoMestoService.DodajTipZadatkaZaRadnoMestoAsync(id, dodajTipZadatkaDto);
+            await _radnoMestoService.DodajZadatakZaRadnoMestoAsync(id, dodajZadatakDto);
 
-            return Ok(new { message = "Tip zadatka je uspesno dodat" });
+            return Ok(new { message = "Zadatak je uspesno dodat" });
         }
         catch(EntityNotFoundException ex)
         {
@@ -146,8 +146,8 @@ public class RadnaMestaController : ControllerBase
         }
     }
 
-    [HttpPut("{id}/tipovi-zadataka/{zadatakId}")]
-    public async Task<IActionResult> AzurirajTipZadatka(int id, int zadatakId, [FromBody] AzurirajTipZadatkaDTO azurirajTipZadatkaDto)
+    [HttpPut("{radnoMestoId}/zadaci/{zadatakId}")]
+    public async Task<IActionResult> AzurirajTipZadatka(int radnoMestoId, int zadatakId, [FromBody] AzurirajZadatakDTO azurirajZadatakDto)
     {
         if (!ModelState.IsValid)
         {
@@ -156,7 +156,7 @@ public class RadnaMestaController : ControllerBase
 
         try
         {
-            await _radnoMestoService.AzurirajTipZadatkaZaRadnoMestoAsync(id, zadatakId, azurirajTipZadatkaDto);
+            await _radnoMestoService.AzurirajZadatakZaRadnoMestoAsync(radnoMestoId, zadatakId, azurirajZadatakDto);
 
             return NoContent();
         }
@@ -172,8 +172,8 @@ public class RadnaMestaController : ControllerBase
         }
     }
 
-    [HttpDelete("{id}/tipovi-zadataka/{zadatakId}")]
-    public async Task<IActionResult> ObrisiTipZadatka(int id, int zadatakId)
+    [HttpDelete("{radnoMestoId}/zadaci/{zadatakId}")]
+    public async Task<IActionResult> ObrisiTipZadatka(int radnoMestoId, int zadatakId)
     {
         if (!ModelState.IsValid)
         {
@@ -182,7 +182,7 @@ public class RadnaMestaController : ControllerBase
 
         try
         {
-            await _radnoMestoService.ObrisiTipZadatkaZaRadnoMestoAsync(id, zadatakId);
+            await _radnoMestoService.ObrisiZadatakZaRadnoMestoAsync(radnoMestoId, zadatakId);
 
             return NoContent();
         }

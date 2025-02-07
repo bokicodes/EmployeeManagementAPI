@@ -1,8 +1,8 @@
 ﻿namespace EmployeeManagement.Infrastructure.Models
 {
-    public partial class TipZadatka
+    public partial class Zadatak
     {
-        public TipZadatka()
+        public Zadatak()
         {
             DodeljeniZadaci = new List<DodeljenZadatak>();
         }
@@ -15,10 +15,10 @@
         public virtual RadnoMesto RadnoMesto { get; set; } = null!;
         public virtual ICollection<DodeljenZadatak> DodeljeniZadaci { get; set; }
 
-        public void Azuriraj(TipZadatka tipZadatka)
+        public void Azuriraj(Zadatak zadatak)
         {
-            NazivZad = tipZadatka.NazivZad;
-            OpisZad = tipZadatka.OpisZad;
+            NazivZad = zadatak.NazivZad;
+            OpisZad = zadatak.OpisZad;
         }
     }
 }

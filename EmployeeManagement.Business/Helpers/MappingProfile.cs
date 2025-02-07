@@ -2,7 +2,7 @@
 using EmployeeManagement.Business.DTOs.DodeljenZadatak;
 using EmployeeManagement.Business.DTOs.OrganizacionaCelina;
 using EmployeeManagement.Business.DTOs.RadnoMesto;
-using EmployeeManagement.Business.DTOs.TipZadatka;
+using EmployeeManagement.Business.DTOs.Zadatak;
 using EmployeeManagement.Business.DTOs.Zaposleni;
 using EmployeeManagement.Infrastructure.Models;
 
@@ -31,13 +31,13 @@ public class MappingProfile : Profile
         CreateMap<OrganizacionaCelina, DodajOrgCelinuDTO>().ReverseMap();
         CreateMap<OrganizacionaCelina, AzurirajOrgCelinuDTO>().ReverseMap();
 
-        CreateMap<TipZadatka, TipZadatkaDTO>().ReverseMap();
-        CreateMap<TipZadatka, DodajTipZadatkaDTO>().ReverseMap();
-        CreateMap<TipZadatka, AzurirajTipZadatkaDTO>().ReverseMap();
+        CreateMap<Zadatak, ZadatakDTO>().ReverseMap();
+        CreateMap<Zadatak, DodajZadatakDTO>().ReverseMap();
+        CreateMap<Zadatak, AzurirajZadatakDTO>().ReverseMap();
 
         CreateMap<DodeljenZadatak, DodeljenZadatakDTO>()
             .ForMember(dz => dz.NazivZaposlenog, opt => opt.MapFrom(src => $"{src.Zaposleni.Ime} {src.Zaposleni.Prezime}"))
-            .ForMember(dz => dz.NazivZadatka, opt => opt.MapFrom(src => src.TipZadatka.NazivZad))
+            .ForMember(dz => dz.NazivZadatka, opt => opt.MapFrom(src => src.Zadatak.NazivZad))
             .ReverseMap();
         CreateMap<DodeljenZadatak, DodeliZadatakDTO>().ReverseMap();
         CreateMap<DodeljenZadatak, AzurirajDodeljenZadatakDTO>().ReverseMap();

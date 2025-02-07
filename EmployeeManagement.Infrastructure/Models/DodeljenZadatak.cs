@@ -8,7 +8,7 @@
         public DateTime DatumZadavanja { get; set; }
         public DateTime? DatumZavrsetka { get; set; }
 
-        public virtual TipZadatka TipZadatka { get; set; } = null!;
+        public virtual Zadatak Zadatak { get; set; } = null!;
         public virtual Zaposleni Zaposleni { get; set; } = null!;
     }
 }

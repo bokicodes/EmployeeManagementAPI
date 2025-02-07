@@ -5,5 +5,5 @@ namespace EmployeeManagement.Infrastructure.RepositoryInterfaces;
 public interface IRadnoMestoRepository : IGenerickiRepository<RadnoMesto>
 {
     Task<RadnoMesto?> VratiRadnoMestoSaDetaljimaAsync(int radnoMestoId);
-    Task<RadnoMesto?> VratiRadnoMestoPoTipuZadatkaIdAsync(int zadatakId);
+    Task<RadnoMesto?> VratiRadnoMestoPoZadatkuIdAsync(int zadatakId);
 }

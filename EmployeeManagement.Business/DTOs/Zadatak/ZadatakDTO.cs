@@ -1,6 +1,6 @@
-﻿namespace EmployeeManagement.Business.DTOs.TipZadatka;
+﻿namespace EmployeeManagement.Business.DTOs.Zadatak;
 
-public class TipZadatkaDTO
+public class ZadatakDTO
 {
     public int ZadatakId { get; set; }
     public int RadnoMestoId { get; set; }

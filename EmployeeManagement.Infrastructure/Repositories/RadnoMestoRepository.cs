@@ -11,17 +11,17 @@ public class RadnoMestoRepository : GenerickiRepository<RadnoMesto>, IRadnoMesto
     {
     }
 
-    public async Task<RadnoMesto?> VratiRadnoMestoPoTipuZadatkaIdAsync(int zadatakId)
+    public async Task<RadnoMesto?> VratiRadnoMestoPoZadatkuIdAsync(int zadatakId)
     {
         return await _context.RadnaMesta
-            .Where(rm => rm.TipoviZadataka.Any(tz => tz.ZadatakId == zadatakId))
+            .Where(rm => rm.Zadaci.Any(tz => tz.ZadatakId == zadatakId))
             .FirstOrDefaultAsync();
     }
 
     public async Task<RadnoMesto?> VratiRadnoMestoSaDetaljimaAsync(int radnoMestoId)
     {
         return await _context.RadnaMesta.Where(rm => rm.RadnoMestoId == radnoMestoId)
-            .Include(rm => rm.Zaposleni).Include(rm => rm.TipoviZadataka)
+            .Include(rm => rm.Zaposleni).Include(rm => rm.Zadaci)
             .FirstOrDefaultAsync();
     }
 }

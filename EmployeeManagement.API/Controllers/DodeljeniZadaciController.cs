@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace EmployeeManagementAPI.Controllers;
 
 [ApiController]
-[Route("/api/zaposleni/{zaposleniId:int}/tipovi-zadataka")]
+[Route("/api/zaposleni/{zaposleniId:int}/zadaci")]
 public class DodeljeniZadaciController : ControllerBase
 {
     private readonly IDodeljenZadatakService _dodeljenZadatakService;
