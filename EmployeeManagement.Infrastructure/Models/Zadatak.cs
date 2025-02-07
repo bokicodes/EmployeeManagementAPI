@@ -20,6 +20,7 @@
         {
             NazivZad = zadatak.NazivZad;
             OpisZad = zadatak.OpisZad;
+            TipZadatka = zadatak.TipZadatka;
         }
     }
 }

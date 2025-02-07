@@ -8,4 +8,5 @@ public class DodeljenZadatakDTO
     public string NazivZadatka { get; set; }
     public DateTime DatumZadavanja { get; set; }
     public DateTime? DatumZavrsetka { get; set; }
+    public DateTime RokIzvrsenja { get; set; }
 }

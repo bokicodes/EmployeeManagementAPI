@@ -13,7 +13,7 @@ namespace EmployeeManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(EmployeeManagementDBContext))]
     [Migration("20250207123201_tip_zadatka_enum")]
-    partial class tip_zadatka_enum
+    partial class dodavanjeKoloneTipZadatka
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

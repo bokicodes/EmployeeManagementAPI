@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EmployeeManagement.Infrastructure.Migrations
 {
-    public partial class tip_zadatka_enum : Migration
+    public partial class dodavanjeKoloneTipZadatka : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
