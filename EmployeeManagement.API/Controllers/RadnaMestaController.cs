@@ -139,6 +139,11 @@ public class RadnaMestaController : ControllerBase
             _logger.LogInformation("Radno mesto nije pronadjeno.");
             return NotFound(new { errorMsg = ex.Message });
         }
+        catch(ArgumentException ex)
+        {
+            _logger.LogInformation("Losa vrednost za tip zadatka.");
+            return NotFound(new { errorMsg = ex.Message });
+        }
         catch (DbUpdateException)
         {
             _logger.LogInformation("Doslo je do greske.");
@@ -163,6 +168,11 @@ public class RadnaMestaController : ControllerBase
         catch (EntityNotFoundException ex)
         {
             _logger.LogInformation("Entitet nije pronadjen.");
+            return NotFound(new { errorMsg = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            _logger.LogInformation("Losa vrednost za tip zadatka.");
             return NotFound(new { errorMsg = ex.Message });
         }
         catch (DbUpdateException)

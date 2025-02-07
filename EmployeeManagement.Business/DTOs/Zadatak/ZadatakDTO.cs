@@ -6,4 +6,5 @@ public class ZadatakDTO
     public int RadnoMestoId { get; set; }
     public string NazivZad { get; set; }
     public string OpisZad { get; set; }
+    public string TipZadatka { get; set; }
 }

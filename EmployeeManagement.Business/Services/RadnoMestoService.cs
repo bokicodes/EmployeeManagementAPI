@@ -96,6 +96,11 @@ public class RadnoMestoService : IRadnoMestoService
             throw new EntityNotFoundException("To radno mesto ne postoji");
         }
 
+        if(!Enum.TryParse(typeof(TipZadatka), dodajZadatakDto.TipZadatka, out _))
+        {
+            throw new ArgumentException("Ne postojeca vrednost za tip zadatka");    
+        }
+
         var zad = _mapper.Map<Zadatak>(dodajZadatakDto);
 
         radnoMesto.DodajZadatak(zad);
@@ -117,6 +122,11 @@ public class RadnoMestoService : IRadnoMestoService
         if(zad is null)
         {
             throw new EntityNotFoundException("Taj zadatak ne postoji");
+        }
+
+        if(!Enum.TryParse(typeof(TipZadatka), azurirajZadatakDto.TipZadatka, out _))
+        {
+            throw new ArgumentException("Ne postojeca vrednost za tip zadatka");
         }
 
         var noviZad = _mapper.Map<Zadatak>(azurirajZadatakDto);

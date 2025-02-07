@@ -31,9 +31,15 @@ public class MappingProfile : Profile
         CreateMap<OrganizacionaCelina, DodajOrgCelinuDTO>().ReverseMap();
         CreateMap<OrganizacionaCelina, AzurirajOrgCelinuDTO>().ReverseMap();
 
-        CreateMap<Zadatak, ZadatakDTO>().ReverseMap();
-        CreateMap<Zadatak, DodajZadatakDTO>().ReverseMap();
-        CreateMap<Zadatak, AzurirajZadatakDTO>().ReverseMap();
+        CreateMap<Zadatak, ZadatakDTO>()
+            .ForMember(dest => dest.TipZadatka, opt => opt.MapFrom(src => src.TipZadatka))
+            .ReverseMap();
+        CreateMap<Zadatak, DodajZadatakDTO>()
+            .ForMember(dest => dest.TipZadatka, opt => opt.MapFrom(src => src.TipZadatka))
+            .ReverseMap();
+        CreateMap<Zadatak, AzurirajZadatakDTO>()
+            .ForMember(dest => dest.TipZadatka, opt => opt.MapFrom(src => src.TipZadatka))
+            .ReverseMap();
 
         CreateMap<DodeljenZadatak, DodeljenZadatakDTO>()
             .ForMember(dz => dz.NazivZaposlenog, opt => opt.MapFrom(src => $"{src.Zaposleni.Ime} {src.Zaposleni.Prezime}"))
