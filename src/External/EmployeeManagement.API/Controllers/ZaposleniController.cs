@@ -1,8 +1,12 @@
 ﻿using EmployeeManagement.Application.DTOs.Zaposleni;
 using EmployeeManagement.Application.ServiceInterfaces;
 using EmployeeManagement.Domain.CustomExceptions;
+using EmployeeManagement.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.ConstrainedExecution;
+using System.Runtime.Intrinsics.X86;
 
 namespace EmployeeManagementAPI.Controllers;
 
@@ -130,6 +134,17 @@ public class ZaposleniController : ControllerBase
         {
             _logger.LogInformation("Zaposleni nije pronadjen.");
             return NotFound(new { errorMsg = ex.Message });
+        }
+        catch(DbUpdateException ex)
+        {
+            if(ex.InnerException is SqlException)
+            {
+                _logger.LogInformation("Neuspesno brisanje zaposlenog zbog narusavanja referencijalnog intergriteta.");
+                return Conflict(new { errorMsg = "Ne moze se obrisati zaposleni jer ima svoje dodeljene zadatke." });
+                }
+
+            _logger.LogInformation("Doslo je do greske prilikom brisanja zaposlenog.");
+            return StatusCode(500, "Greska prilikom brisanja zaposlenog");
         }
     }
 }

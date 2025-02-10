@@ -3,6 +3,7 @@ using EmployeeManagement.Application.DTOs.Zadatak;
 using EmployeeManagement.Application.ServiceInterfaces;
 using EmployeeManagement.Domain.CustomExceptions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementAPI.Controller;
@@ -115,6 +116,17 @@ public class RadnaMestaController : ControllerBase
             _logger.LogInformation("Radno mesto nije pronadjeno.");
             return NotFound(new { errorMsg = ex.Message });
         }
+        catch (DbUpdateException ex)
+        {
+            if (ex.InnerException is SqlException)
+            {
+                _logger.LogInformation("Neuspesno brisanje radnog mesta zbog narusavanja referencijalnog intergriteta.");
+                return Conflict(new { errorMsg = "Ne moze se obrisati radno mesto jer ima svoje zaposlene koji rade na njemu ili ima dodeljene zadatke." });
+            }
+
+            _logger.LogInformation("Doslo je do greske prilikom brisanja radnog mesta.");
+            return StatusCode(500, "Greska prilikom brisanja radnog mesta");
+        }
     }
 
 
@@ -201,8 +213,13 @@ public class RadnaMestaController : ControllerBase
             _logger.LogInformation("Entitet nije pronadjen.");
             return NotFound(new { errorMsg = ex.Message });
         }
-        catch (DbUpdateException)
+        catch (DbUpdateException ex)
         {
+            if (ex.InnerException is SqlException)
+            {
+                _logger.LogInformation("Neuspesno brisanje zadatka zbog narusavanja referencijalnog intergriteta.");
+                return Conflict(new { errorMsg = "Ne moze se obrisati zadatak jer je dodeljen nekom zaposlenom." });
+            }
             _logger.LogInformation("Doslo je do greske.");
             return StatusCode(500, "Doslo je do greske prilikom brisanja zadatka.");
         }
