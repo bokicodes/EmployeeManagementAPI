@@ -83,10 +83,20 @@ public class ZaposleniController : ControllerBase
 
             return CreatedAtRoute("VratiZaposlenogPoId", new { id = zaposleniDto.ZaposleniId }, zaposleniDto);
         }
-        catch (DbUpdateException)
+        catch (DbUpdateException ex)
         {
-            _logger.LogInformation("Doslo je do greske");
-            return NotFound(new { errorMsg = "Ne postojece radno mesto ili organizaciona celina" });
+            if (ex.InnerException is SqlException)
+            {
+                _logger.LogInformation("Naruseno vrednosno ogranicenje.");
+
+                string message = ex.InnerException.Message.Contains("RM") ? "Radno mesto je popunjeno (10)" :
+                    ex.InnerException.Message.Contains("OrgCel") ? "Organizaciona celina je popunjena (20)" :
+                    ex.InnerException.Message.Contains("FK") ? "Ne postojece radno mesto ili organizaciona celina" : "Greska prilikom kreiranja zaposlenog";
+
+                return Conflict(new { errorMsg = message });
+            }
+
+            return StatusCode(500, "Doslo je do greske prilikom kreiranja zaposlenog");
         } 
     }
 
@@ -115,7 +125,7 @@ public class ZaposleniController : ControllerBase
         catch (DbUpdateException)
         {
             _logger.LogInformation("Doslo je do greske.");
-            return NotFound(new { errorMsg = "Ne postojece radno mesto ili organizaciona celina" });
+            return Conflict(new { errorMsg = "Ne postojece radno mesto ili organizaciona celina" });
         }
     }
 
@@ -141,7 +151,7 @@ public class ZaposleniController : ControllerBase
             {
                 _logger.LogInformation("Neuspesno brisanje zaposlenog zbog narusavanja referencijalnog intergriteta.");
                 return Conflict(new { errorMsg = "Ne moze se obrisati zaposleni jer ima svoje dodeljene zadatke." });
-                }
+            }
 
             _logger.LogInformation("Doslo je do greske prilikom brisanja zaposlenog.");
             return StatusCode(500, "Greska prilikom brisanja zaposlenog");
