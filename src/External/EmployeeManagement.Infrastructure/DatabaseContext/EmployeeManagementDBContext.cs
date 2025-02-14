@@ -1,10 +1,12 @@
-﻿using EmployeeManagement.Domain.Models;
-
+﻿using EmployeeManagement.Application.Identity;
+using EmployeeManagement.Domain.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagement.Infrastructure.DatabaseContext
 {
-    public partial class EmployeeManagementDBContext : DbContext
+    public partial class EmployeeManagementDBContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
     {
         public EmployeeManagementDBContext()
         {
@@ -23,6 +25,8 @@ namespace EmployeeManagement.Infrastructure.DatabaseContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<DodeljenZadatak>(entity =>
             {
                 entity.HasKey(e => new { e.RadnoMestoId, e.ZadatakId, e.ZaposleniId });
