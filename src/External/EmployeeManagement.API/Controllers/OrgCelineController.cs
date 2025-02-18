@@ -1,12 +1,14 @@
 ﻿using EmployeeManagement.Application.DTOs.OrganizacionaCelina;
 using EmployeeManagement.Application.ServiceInterfaces;
 using EmployeeManagement.Domain.CustomExceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementAPI.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("/api/organizacione-celine")]
 public class OrgCelineController : ControllerBase
 {

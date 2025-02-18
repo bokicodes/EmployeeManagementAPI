@@ -1,11 +1,14 @@
 ﻿using EmployeeManagement.Application.DTOs.KorisnickiNalog;
 using EmployeeManagement.Application.Identity;
+using EmployeeManagement.Application.ServiceInterfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeManagement.API.Controllers;
 
 [ApiController]
+[AllowAnonymous]
 [Route("/api")]
 public class KorisnickiNalogController : Controller
 {
@@ -13,26 +16,28 @@ public class KorisnickiNalogController : Controller
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly ILogger<KorisnickiNalogController> _logger;
+    private readonly IJwtService _jwtService;
 
     public KorisnickiNalogController(UserManager<ApplicationUser> userManager, 
         SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager,
-        ILogger<KorisnickiNalogController> logger)
+        ILogger<KorisnickiNalogController> logger, IJwtService jwtService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _roleManager = roleManager;
         _logger = logger;
+        _jwtService = jwtService;
     }
 
     [HttpPost("registracija")]
-    public async Task<IActionResult> Register(RegistracijaDTO registracijaDTO)
+    public async Task<IActionResult> Register([FromBody] RegistracijaDTO registracijaDTO)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        if (await IsEmailAlreadyRegistered(registracijaDTO.Email))
+        if (await EmailVecRegistrovan(registracijaDTO.Email))
         {
             _logger.LogInformation("Neuspesna registracija jer korisnik sa datom email adresom vec postoji.");
 
@@ -54,9 +59,11 @@ public class KorisnickiNalogController : Controller
 
             await _signInManager.SignInAsync(user, isPersistent: false);
 
+            var autentikacioniOdgovor = _jwtService.KreirajJwtToken(user);
+
             _logger.LogInformation("Korisnik je uspesno prijavljen.");
 
-            return Ok(user);
+            return Ok(autentikacioniOdgovor);
         }
         else
         {
@@ -86,7 +93,9 @@ public class KorisnickiNalogController : Controller
 
             var user = await _userManager.FindByEmailAsync(prijavaDTO.Email);
 
-            return Ok(new { korisnickoIme = user.PersonName, email = user.Email });
+            var autentikacioniOdgovor = _jwtService.KreirajJwtToken(user);
+
+            return Ok(autentikacioniOdgovor);
         }
 
         _logger.LogInformation("Neuspesna prijava.");
@@ -99,10 +108,12 @@ public class KorisnickiNalogController : Controller
     {
         await _signInManager.SignOutAsync();
 
+        _logger.LogInformation("Korisnik je odjavljen. ");
+
         return NoContent();
     }
 
-    private async Task<bool> IsEmailAlreadyRegistered(string email)
+    private async Task<bool> EmailVecRegistrovan(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
 

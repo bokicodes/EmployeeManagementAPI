@@ -5,10 +5,14 @@ using EmployeeManagement.Application.Services;
 using EmployeeManagement.Domain.RepositoryInterfaces;
 using EmployeeManagement.Infrastructure.DatabaseContext;
 using EmployeeManagement.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +49,8 @@ builder.Services.AddScoped<IRadnoMestoService, RadnoMestoService>();
 builder.Services.AddScoped<IOrgCelinaService, OrgCelinaService>();
 builder.Services.AddScoped<IDodeljenZadatakService, DodeljenZadatakService>();
 
+builder.Services.AddTransient<IJwtService, JwtService>();
+
 
 builder.Services.AddIdentity<ApplicationUser,
     ApplicationRole>(options =>
@@ -59,6 +65,28 @@ builder.Services.AddIdentity<ApplicationUser,
     .AddDefaultTokenProviders()
     .AddUserStore<UserStore<ApplicationUser, ApplicationRole, EmployeeManagementDBContext, Guid>>()
     .AddRoleStore<RoleStore<ApplicationRole, EmployeeManagementDBContext, Guid>>();
+
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]))
+    };
+});
+
+builder.Services.AddAuthorization();
 
 
 var app = builder.Build();

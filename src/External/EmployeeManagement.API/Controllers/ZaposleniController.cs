@@ -2,6 +2,7 @@
 using EmployeeManagement.Application.ServiceInterfaces;
 using EmployeeManagement.Domain.CustomExceptions;
 using EmployeeManagement.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using System.Runtime.Intrinsics.X86;
 namespace EmployeeManagementAPI.Controllers;
 
 [Route("api/zaposleni")]
+[Authorize]
 [ApiController]
 public class ZaposleniController : ControllerBase
 {

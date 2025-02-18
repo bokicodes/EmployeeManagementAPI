@@ -2,6 +2,7 @@
 using EmployeeManagement.Application.DTOs.Zadatak;
 using EmployeeManagement.Application.ServiceInterfaces;
 using EmployeeManagement.Domain.CustomExceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace EmployeeManagementAPI.Controller;
 
 [Route("api/radna-mesta")]
+[Authorize]
 [ApiController]
 public class RadnaMestaController : ControllerBase
 {
