@@ -16,6 +16,8 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddEnvironmentVariables();
+
 // Add services to the container.
 
 var logger = new LoggerConfiguration()
@@ -82,7 +84,7 @@ builder.Services.AddAuthentication(options =>
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]))
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt_EmployeeManagement_SecretKey"]))
     };
 });
 
