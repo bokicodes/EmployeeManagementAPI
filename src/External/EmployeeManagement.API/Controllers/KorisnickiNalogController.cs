@@ -4,6 +4,7 @@ using EmployeeManagement.Application.ServiceInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace EmployeeManagement.API.Controllers;
 
@@ -63,6 +64,11 @@ public class KorisnickiNalogController : Controller
 
             _logger.LogInformation("Korisnik je uspesno prijavljen.");
 
+            user.RefreshToken = autentikacioniOdgovor.RefreshToken;
+            user.RefreshTokenExpirationDate = autentikacioniOdgovor.VremeIstekaRefreshTokena;
+
+            await _userManager.UpdateAsync(user);
+
             return Ok(autentikacioniOdgovor);
         }
         else
@@ -95,6 +101,11 @@ public class KorisnickiNalogController : Controller
 
             var autentikacioniOdgovor = _jwtService.KreirajJwtToken(user);
 
+            user.RefreshToken = autentikacioniOdgovor.RefreshToken;
+            user.RefreshTokenExpirationDate = autentikacioniOdgovor.VremeIstekaRefreshTokena;
+
+            await _userManager.UpdateAsync(user);
+
             return Ok(autentikacioniOdgovor);
         }
 
@@ -111,6 +122,51 @@ public class KorisnickiNalogController : Controller
         _logger.LogInformation("Korisnik je odjavljen. ");
 
         return NoContent();
+    }
+
+    [HttpPost("generisi-novi-token")]
+    public async Task<IActionResult> GenerisiNoviToken(TokenModel tokenModel)
+    {
+        if(tokenModel is null)
+        {
+            return BadRequest();
+        }
+
+        ClaimsPrincipal? principal;
+        
+        try
+        {
+            principal = _jwtService.VratiInformacijeIzTokena(tokenModel.JwtToken);
+
+        }
+        catch (Exception)
+        {
+            return BadRequest("Los jwt token");
+        }
+
+        if(principal == null)
+        {
+            return BadRequest("Nevalidan jwt token");
+        }
+
+        string? email = principal.FindFirstValue(ClaimTypes.Email);
+
+        ApplicationUser? user = await _userManager.FindByEmailAsync(email);
+    
+        if(user == null || user.RefreshToken != tokenModel.RefreshToken || 
+            user.RefreshTokenExpirationDate <= DateTime.UtcNow)
+        {
+            return BadRequest("Nevalidan refresh token");
+        }
+
+        var autentikacioniOdgovor = _jwtService.KreirajJwtToken(user);
+
+        user.RefreshToken = autentikacioniOdgovor.RefreshToken;
+        user.RefreshTokenExpirationDate = autentikacioniOdgovor.VremeIstekaRefreshTokena;
+
+        await _userManager.UpdateAsync(user);
+
+        return Ok(autentikacioniOdgovor);
     }
 
     private async Task<bool> EmailVecRegistrovan(string email)

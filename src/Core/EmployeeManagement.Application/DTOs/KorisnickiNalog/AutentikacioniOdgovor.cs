@@ -3,6 +3,8 @@
 public class AutentikacioniOdgovor
 {
     public string? Email { get; set; } = string.Empty;
-    public string? Token { get; set; } = string.Empty;
-    public DateTime VremeIstekaTokena { get; set; }
+    public string? JwtToken { get; set; } = string.Empty;
+    public DateTime VremeIstekaJwtTokena { get; set; }
+    public string? RefreshToken { get; set; } = string.Empty;
+    public DateTime VremeIstekaRefreshTokena { get; set; }
 }
